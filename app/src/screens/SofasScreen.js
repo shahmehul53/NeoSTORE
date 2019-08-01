@@ -7,7 +7,7 @@ import StarsUnfilled from '../components/StarsUnfilled'
 
 
 
-export default class Tables extends Component {
+export default class Sofas extends Component {
 
     state = {
        // error: false,
@@ -19,9 +19,9 @@ export default class Tables extends Component {
 
     componentDidMount() {
         //console.log('COMPONENT DID MOUNT')
-        categoryId=1
+        categoryId=2
         // ${categoryId}
-        fetch("http://staging.php-dev.in:8844/trainingapp/api/products/getList?product_category_id=1")
+        fetch("http://staging.php-dev.in:8844/trainingapp/api/products/getList?product_category_id=3")
         .then((response)=> response.json())
         .then((responseJson)=>{
             console.log(responseJson)
@@ -71,11 +71,14 @@ export default class Tables extends Component {
                                     <Text style={{fontWeight: 'bold', fontSize: 18}}>{item.name}</Text> 
                                     <Text>{item.producer}</Text>
                                     {/* <View style={{flex: 1, flexDirection: "row", margin: 10}}> */}
-                                    <View style={{flexDirection: 'row'}}>
+                                        {/* <View style={{margin: 10,flexDirection: 'row'}}> */}
+                                        <View style={{flexDirection: 'row'}}>
                                            <Text style={{color:"#FE4040",fontSize: 20, fontWeight: 'bold'}}>Rs.{item.cost}</Text>
                                            
                                            <Text style={{paddingLeft: 140}}>{item.rating}</Text>
                                         </View>
+                                           {/* <View style={{flexDirection: 'row', marginLeft: 150}}></View> */}
+                                        {/* </View> */}
                                     {/* </View> */}
                                 </View>
 

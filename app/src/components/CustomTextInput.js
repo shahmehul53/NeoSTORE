@@ -3,14 +3,14 @@ import {View, StyleSheet, Image, TextInput} from 'react-native';;
 import style from '../Styles'
 import R from '../R'
 
-const CustomTextInput=({sourceImage,placeholderValue})=>{
+const CustomTextInput=({sourceImage,placeholderValue, onChangeText})=>{
     return(
     <View style={style.textInputStyle}>
         <View style={{flex:1}}>
           <Image source={sourceImage}/>
           </View>
         <View style={{flex:5}}>
-         <TextInput placeholderTextColor={R.color.textInputBorderColor}  placeholder={placeholderValue}>
+         <TextInput placeholderTextColor={R.color.textInputBorderColor}  placeholder={placeholderValue} onChangeText={onChangeText}>
 
          </TextInput> 
         </View>  

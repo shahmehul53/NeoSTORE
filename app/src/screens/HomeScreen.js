@@ -15,6 +15,20 @@ const gridData = [
 
 
 export default class HomeScreen extends Component {
+
+    static navigationOptions = ({ navigation }) => ({
+        title: 'Home Screen',
+            headerStyle:{
+                backgroundColor: R.color.backgroundColorDefault
+            },
+            headerLeft:(
+                <TouchableOpacity style={{paddingLeft: 20}} onPress={()=>navigation.toggleDrawer()}>
+                    <Image source={R.images.menu_icon} />
+                </TouchableOpacity>
+            ),
+            headerTintColor: R.color.textInputBorderColor,
+            
+      });
         
     
     render(){

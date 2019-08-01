@@ -92,7 +92,81 @@ const style=StyleSheet.create({
         alignItems: 'center',
         fontSize: 14,
         fontWeight: 'bold'
-    } 
+    } ,
+    buyNow:{
+        backgroundColor: 'red',
+        width: 100,
+        height: 51,
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        borderRadius: 10, 
+        borderWidth: 1,borderColor: '#fff'
+    },
+    buyNowText:{
+         fontWeight: 'bold', 
+         color: 'white',
+         justifyContent: 'center',
+         alignItems: 'center',
+         textAlign: 'center',
+    },
+    box: {
+        flex: 0,
+        width: 420,
+        backgroundColor: '#ffffff',
+        marginBottom: 10,
+    },
+    boxmid: {
+        flex: 0,
+        width: 400,
+        height: 425,
+        backgroundColor: '#ffffff',
+        borderRadius: 10,
+        
+    },
+    bigImage: {
+        alignItems: "center",
+    },
+    boxend: {
+        flex: 1,
+        width: '100%',
+        height: 60,
+        backgroundColor: '#ffffff',
+        position: 'absolute',
+        bottom: 0,
+    },
+    button: {
+        width: 190,
+        height: 45,
+        backgroundColor: '#e91c1a',
+        borderRadius: 10,
+        },
+    buttonRate: {
+        marginLeft: 10,
+        width: 190,
+        height: 45,
+        backgroundColor: '#9c908f',
+        borderRadius: 10,
+        alignContent: "center",
+    },
+    Textbutton: {
+        fontSize: 18,
+        fontWeight: '500',
+        color: '#ffffff',
+        textAlign: 'center',
+        paddingVertical: 10,
+    },
+    TextbuttonRate: {
+        fontSize: 18,
+        fontWeight: '500',
+        color: '#5c5858',
+        textAlign: 'center',
+        paddingVertical: 10,
+    },
+
+    
+    
+
 })
 
 export default style
