@@ -98,7 +98,7 @@ export default class MyCartScreen extends Component {
                     </View> 
                     
                   </View>
-                <View style={{flex: 1, justifyContent: 'flex-start',alignItems: 'center'}}>
+                <View style={{flex: 1, justifyContent: 'flex-start ',alignItems: 'center'}}>
                        <CustomRedButton 
                        title="ORDER NOW"
                        onPress={()=>this.props.navigation.navigate("AddAddress")}>
