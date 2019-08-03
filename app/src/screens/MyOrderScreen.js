@@ -42,27 +42,26 @@ export default class MyOrderScreen extends Component {
                     <TouchableOpacity onPress={()=> this.props.navigation.navigate("OrderDetails", {
                         OrderID: item.id
                       })} style={{margin: 10,height: 80}}>
-                        
+                    <View style={{margin: 10, flexDirection: "row"}}>
                         <View style={styles.OrderId}>
                             <Text style={styles.orderIDText}>Order ID: {item.id}</Text>
                             
                             <View style={styles.lineStyle} />
                             
                             <Text style={styles.createdText}>Order Date: {item.created}</Text>
-                            
+                        
                         </View>
                         
                         <View style={styles.costView}> 
-                            <Text style={styles.costText}>Rs.{item.cost}</Text>
-                        
+                            <Text style={styles.costText}>Rs.{item.cost}</Text>  
                         </View> 
+                    </View>
                     </TouchableOpacity>
                 )}
                 />
             </View>
         )
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -75,24 +74,25 @@ const styles = StyleSheet.create({
         flex: 1,
         //flexDirection: 'row'
         justifyContent: 'flex-start',
-        margin: 10
+        //margin: 10
     },
     orderIDText:{
         fontSize: 16,
         color: '#1C1C1C',
         paddingBottom: 10, 
-        fontWeight: '500'
+        fontWeight: '600'
     },
     lineStyle:{
         borderWidth: 1,
-        borderColor:'black',
+        borderColor:'#4f4f4f',
         width: 165
         //margin:10,
     },
     createdText:{
         fontSize: 13,
-        color: '#1c1c1c',
-        paddingTop: 10
+        color: '#4f4f4f',
+        paddingTop: 10,
+        fontWeight: '500'
     },
     costView:{
         flex: 1,

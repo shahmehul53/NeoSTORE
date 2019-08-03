@@ -26,6 +26,11 @@ export default class HomeScreen extends Component {
                     <Image source={R.images.menu_icon} />
                 </TouchableOpacity>
             ),
+            headerRight:(
+                <TouchableOpacity style={{paddingRight: 10}}>
+                    <Image source={R.images.search_icon} />
+                </TouchableOpacity>
+            ),
             headerTintColor: R.color.textInputBorderColor,
             
       });

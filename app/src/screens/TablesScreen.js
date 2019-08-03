@@ -75,7 +75,7 @@ export default class Tables extends Component {
                                            <Text style={{color:"#FE4040",fontSize: 20, fontWeight: 'bold'}}>Rs.{item.cost}</Text>
                                            
                                            <Text style={{paddingLeft: 140}}>{item.rating}</Text>
-                                        </View>
+                                    </View>
                                     {/* </View> */}
                                 </View>
 

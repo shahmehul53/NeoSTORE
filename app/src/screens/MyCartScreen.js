@@ -4,6 +4,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import R from '../R';
 import CustomButtom from '../components/CustomButton';
 import CustomRedButton from '../components/CustomRedButton';
+import { SwipeableFlatList} from 'react-native-swipeable-flat-list';
+import Spinner from 'react-native-number-spinner-v2';
 
 export default class MyCartScreen extends Component {
     constructor(){
@@ -13,6 +15,8 @@ export default class MyCartScreen extends Component {
             total: ""
         }
     }
+
+    
 
     componentDidMount() {
         fetch('http://staging.php-dev.in:8844/trainingapp/api/cart',{
@@ -36,6 +40,26 @@ export default class MyCartScreen extends Component {
         })
     }
 
+    editCart(id){
+        const product_id = id;
+        const quantity = quantity
+        fetch('http://staging.php-dev.in:8844/trainingapp/api/deleteCart',{
+           method: 'POST',
+           headers:{
+            'access_token': "5d2eb4b6ca059",
+            'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body:
+            `product_id=${product_id}&quantity=${quantity}`
+        }).then((response)=>response.json())
+        .then((responseJson)=>{
+            this.componentDidMount()
+        console.log(responseJson)
+        }).catch(error => {
+            console.error(error);
+          });
+    }
+
     deleteItem(id){
         const product_id = id;
         fetch('http://staging.php-dev.in:8844/trainingapp/api/deleteCart',{
@@ -48,12 +72,11 @@ export default class MyCartScreen extends Component {
             `product_id=${product_id}`
         }).then((response)=>response.json())
         .then((responseJson)=>{
-            
+            this.componentDidMount()
         console.log(responseJson)
         }).catch(error => {
             console.error(error);
           });
-
     }
 
     render(){
@@ -75,18 +98,40 @@ export default class MyCartScreen extends Component {
                                     {item.product.name}
                                    </Text>
                                    <Text>({item.product.product_category})</Text>
-                                   <Text style={{paddingTop: 10}}>Qty: {item.quantity}</Text>
+                                   {/* <Text style={{paddingTop: 10}} onChangeText={()=>this.editCart(item.product.id)}>Qty: {item.quantity}</Text> */}
+                                   <Spinner max={10}
+                                    min={2}
+                                    default={5}
+                                    color="#f60"
+                                    numColor="#f60"
+                                    width= '40'
+                                    height= '40'
+                                    onNumChange={(item)=>this.editCart(item.product.id)}
+                                    style={{paddingTop: 10}}/>
+
                                 </View>
-                                    <View style={{flex: 2, paddingTop: 45, alignItems: 'flex-end'}}>
+                                    <View style={{flex: 2, paddingTop: 45, alignItems: 'flex-end'}}> 
+                                    {/* renderRight={({ item }) => ( */}
                                        <TouchableOpacity  onPress={()=>this.deleteItem(item.product.id)}>
-                                           <Image style={{height: 40, width: 40}} source={R.images.delete}/>
-                                       </TouchableOpacity>
-                                    </View>     
+                                         <Image style={{height: 40, width: 40}} source={R.images.delete}/>
+                                       </TouchableOpacity> 
+                                    
+
+                                       {/* */}
+                                     </View>     
                         </View>
-                               
-                    )}
+                         )}      
+                    
+                        // //  renderRight={({ item }) => (
+                        // // <View style={{height:30,width: 80}}> 
+                        // //  <TouchableOpacity style={{height: 30, width: 60, alignItems: 'center'}} onPress={()=>this.deleteItem(item.product.id)}>
+                        // //     <Image  style={{height:30, width: 30}}source={R.images.delete}/>
+                        // //   </TouchableOpacity> 
+                        // // </View>
+                        //  )}                    
+                     
                     />
-                    </View>
+                </View>
                 <View style={{flex: 1}}>
                  <View style={{ flexDirection: 'row'}}>
                     <View style={{flex: 3, paddingLeft: 20}}>

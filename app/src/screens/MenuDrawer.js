@@ -17,18 +17,20 @@ export default class MenuDrawer extends Component{
         )
     }
 
+    userLogout(){
+        return  this.props.navigation.navigate("Login")
+    }
+
     render(){
         return(
-        <View style={{flex: 1, backgroundColor: 'gray'}}> 
+        <View style={{flex: 1}}> 
             <View style={styles.topLinks}>
 
                 <View style={styles.profile}>
                     <View style={styles.imgView}>
-                        <Image style={styles.img} source={R.images.user_male} />
-                    </View>
-                    <View style={styles.profileText}>
+                        <Image style={styles.img} source={R.images.profile} />
                         <Text style={styles.name}>Mehul Shah</Text>
-                        <Text style={{fontSize: 15, paddingBottom: 5, color: 'white', textAlign: 'left'}}>shahmehul53@gmail.com</Text>
+                        <Text style={{fontSize: 15, paddingBottom: 5, color: 'white'}}>shahmehul53@gmail.com</Text>
                     </View>
                 </View>
             </View>
@@ -69,8 +71,10 @@ export default class MenuDrawer extends Component{
                     {this.navLink('MyOrder', 'My Orders')}
                 </View>
                 <View style= {styles.SectionStyle}>
-                    <Image style= {styles.imgIcon} source={R.images.logout_icon}/>
-                    {this.navLink('Logout', 'Logout')}
+                <Image style= {styles.imgIcon} source={R.images.logout_icon}/>
+                <TouchableOpacity style={{height: 50}} onPress={() => this.userLogout()}>
+                    <Text style={styles.links}>Logout</Text>
+                </TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -89,31 +93,33 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
         paddingTop: 25,
         borderBottomWidth: 1,
         borderBottomColor: '#777777'
     },
     profileText:{
-        flex: 3,
-        flexDirection: 'column',
         justifyContent: 'center'
     },
     name: {
         fontSize: 20,
-        flexDirection: 'column',
+        //flexDirection: 'column',
         justifyContent: 'center',
-        color: 'white'
+        color: 'white',
+        paddingTop: 10
     },
     imgView: {
         flex: 1,
         paddingLeft: 20,
         paddingRight: 20,
+        justifyContent: 'center',
+        alignItems: 'center'
         
         
     },
     img:{
-        height: 70,
-        width: 70,
+        height: 100,
+        width: 100,
         borderRadius: 50,
         
     },
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'black',
         paddingTop: 10,
-        paddingBottom: 450
+        paddingBottom: 450,
     },
     links:{
         flex: 1,
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
         padding: 6,
         paddingLeft: 14,
         margin: 5,
-        textAlign: 'left',
+        textAlign: 'center',
         color: 'white'
     }
 

@@ -39,8 +39,8 @@ export default class ProductDetails extends Component{
         }).catch(error => {
             console.error(error);
           });
-
     }
+    
     onButtonClick(){
         this.setQuantityModalVisible(!this.state.quantityModalVisible);
         this.addToCart();

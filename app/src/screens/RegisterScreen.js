@@ -5,6 +5,7 @@ import style from '../Styles'
 import CustomTextInput from '../components/CustomTextInput'
 import CustomButton from '../components/CustomButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import CustomActivityIndicator from '../components/CustomActivityIndicator';
 
 
 
@@ -12,6 +13,7 @@ export default class RegisterScreen extends Component {
 
     constructor() {
         super()
+        datasource: [],
         this.state = {
             checked: false,
             image: R.images.uncheck_icon,
@@ -39,11 +41,36 @@ export default class RegisterScreen extends Component {
         `first_name=${first_Name}&last_name=${last_Name}&email=${email}&password=${password}&confirm_password=${confirm_password}&gender=${gender}&phone_no=${phone_no}`
         }).then((response)=>response.json())
         .then((responseJson)=>{
+        this.setState({datasource: responseJson}, function(){});
         console.log(responseJson)
-        const msg = responseJson.message
-        alert(msg)
+        this.registeredSuccessfully()
+        }).catch((err)=> {
+            console.error(err)
         })
+    }
+
+    registeredSuccessfully(){
+        const { navigate } = this.props.navigation;
+        if (this.state.datasource.status == 200) {
+            this.setState({
+                isLoading: !this.state.isLoading
+            }),setTimeout(function(){
+                navigate("Login");
+            },2000);
+        } else if (this.state.datasource.status == 401) {
+            alert(this.state.datasource.user_msg);
+        } else if (this.state.datasource.status == 400) {
+            alert(this.state.datasource.user_msg);
+        } else if (this.state.datasource.status == 404){
+            alert(this.state.datasource.user_msg);
         }
+    }
+
+    loadingView(){
+        if(this.state.isLoading){
+            return <CustomActivityIndicator />;
+        }
+    }
     
 
 

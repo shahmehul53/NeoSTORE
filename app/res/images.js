@@ -42,7 +42,8 @@ const images={
     slider_img1: require("./images/slider_img1.jpg"),
     slider_img2: require("./images/slider_img2.jpg"),
     slider_img3: require("./images/slider_img3.jpg"),
-    slider_img4: require("./images/slider_img4.jpg")
+    slider_img4: require("./images/slider_img4.jpg"),
+    profile: require("./images/profile.jpeg")
 }
 
 export default images

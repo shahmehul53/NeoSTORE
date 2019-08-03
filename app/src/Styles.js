@@ -51,8 +51,8 @@ const style=StyleSheet.create({
     regAccount:{
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
+        alignItems:'flex-start',
+        justifyContent: "flex-end",
         fontWeight: 'bold',
         marginTop: 70,
         bottom: 20

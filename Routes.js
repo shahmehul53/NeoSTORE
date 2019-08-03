@@ -22,6 +22,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import ResetPasswordScreen from './app/src/screens/ResetPasswordScreen';
 import AddressScreen from './app/src/screens/AddressScreen';
 import OrderDetailsScreen from './app/src/screens/OrderDetailsScreen';
+import LaunchScreen from './app/src/screens/LaunchScreen';
 
 
 
@@ -327,6 +328,16 @@ import OrderDetailsScreen from './app/src/screens/OrderDetailsScreen';
             headerTintColor: R.color.textInputBorderColor
         }
     },
+    
+});
+
+const launchScreen=createStackNavigator({
+    Launch:{
+        screen: LaunchScreen, 
+        navigationOptions:{
+            header: null
+        },
+    }
 });
 
 const DrawerNavigator= createDrawerNavigator({
@@ -337,7 +348,8 @@ const DrawerNavigator= createDrawerNavigator({
 },
 {
     contentComponent: MenuDrawer,
-    drawerWidth: 300
+    drawerWidth: 280,
+    drawerBackgroundColor: "light blue"
 }
 );
 
@@ -345,8 +357,9 @@ const DrawerNavigator= createDrawerNavigator({
 const SwitchNavigator= createSwitchNavigator({
     session:{screen: DrawerNavigator},
     home:{screen: SessionNavigator},
+    Launcher:{screen: launchScreen}
 }, {
-    initialRouteName: "home"
+    initialRouteName: "Launcher"
 }
 );
 
