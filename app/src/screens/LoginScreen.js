@@ -73,8 +73,8 @@ export default class LoginScreen extends Component {
                   <CustomTextInput sourceImage={R.images.username_icon} placeholderValue='Username' keyboardType="email-address" onChangeText={(username)=>this.setState({username})}></CustomTextInput>
                   <CustomTextInput sourceImage={R.images.password_icon} placeholderValue='Password' secureTextEntry = {true} onChangeText={(password)=>this.setState({password})}></CustomTextInput>
                   <CustomButton title='LOGIN' 
-                     //onPress={()=> this.props.navigation.navigate('Home')}
-                       onPress={()=> this.loginUser(this.state.username,this.state.password)}
+                     onPress={()=> this.props.navigation.navigate('Home')}
+                      // onPress={()=> this.loginUser(this.state.username,this.state.password)}
                    ></CustomButton>
                   <TouchableOpacity onPress={()=>{this.props.navigation.navigate('ForgotPassword')}}>
                       <Text style={style.forgotBtn}>Forgot Password?</Text>

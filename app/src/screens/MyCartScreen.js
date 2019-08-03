@@ -5,7 +5,7 @@ import R from '../R';
 import CustomButtom from '../components/CustomButton';
 import CustomRedButton from '../components/CustomRedButton';
 import { SwipeableFlatList} from 'react-native-swipeable-flat-list';
-import Spinner from 'react-native-number-spinner-v2';
+//import Spinner from 'react-native-number-spinner-v2';
 
 export default class MyCartScreen extends Component {
     constructor(){
@@ -98,8 +98,8 @@ export default class MyCartScreen extends Component {
                                     {item.product.name}
                                    </Text>
                                    <Text>({item.product.product_category})</Text>
-                                   {/* <Text style={{paddingTop: 10}} onChangeText={()=>this.editCart(item.product.id)}>Qty: {item.quantity}</Text> */}
-                                   <Spinner max={10}
+                                   <Text style={{paddingTop: 10}}>Qty: {item.quantity}</Text>
+                                   {/* <Spinner max={10}
                                     min={2}
                                     default={5}
                                     color="#f60"
@@ -107,7 +107,7 @@ export default class MyCartScreen extends Component {
                                     width= '40'
                                     height= '40'
                                     onNumChange={(item)=>this.editCart(item.product.id)}
-                                    style={{paddingTop: 10}}/>
+                                    style={{paddingTop: 10}}/> */}
 
                                 </View>
                                     <View style={{flex: 2, paddingTop: 45, alignItems: 'flex-end'}}> 
