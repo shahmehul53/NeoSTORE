@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Button, Image, TextInput, Text,ScrollView,TouchableOpacity,Modal} from 'react-native';
+import {View, Button, Image, TextInput, Text,ScrollView,TouchableOpacity,Modal, AsyncStorage,StyleSheet} from 'react-native';
 import R from '../R';
 import style from '../Styles'
 import { TouchableHighlight } from 'react-native-gesture-handler';
@@ -16,11 +16,18 @@ export default class ProductDetails extends Component{
             largeImage: "",
             quantityModalVisible: false,
             ratingModalVisible: false,
-            quantity: null
+            quantity: null,
+            access_token: "",
+            user_Ratings: "",
+            defaultRating: 1,
+            maxRating: 5,
+            status: "",
+            user_msg: ""
         };
     }
 
-    addToCart(){
+    async addToCart(){
+        const token = await AsyncStorage.getItem("@storage_Key_token")
         const { navigation } = this.props;
         const quantity = this.state.quantity;
         console.log(this.state.quantity);
@@ -28,7 +35,8 @@ export default class ProductDetails extends Component{
         fetch('http://staging.php-dev.in:8844/trainingapp/api/addToCart',{
            method: 'POST',
            headers:{
-            'access_token': "5d2eb4b6ca059",
+            //'access_token': "5d2eb4b6ca059",
+            access_token: token,
             'Content-Type': 'application/x-www-form-urlencoded',
             },
             body:
@@ -40,11 +48,46 @@ export default class ProductDetails extends Component{
             console.error(error);
           });
     }
+
+     setRatings(){
+        //const token = await AsyncStorage.getItem("@storage_Key_token")
+        const { navigation } = this.props;
+        const product_id = navigation.getParam("productID", "1");
+        const userRating = this.state.user_Ratings;
+        fetch('http://staging.php-dev.in:8844/trainingapp/api/products/setRating',{
+           method: 'POST',
+           headers:{
+            //'access_token': "5d2eb4b6ca059",
+            //access_token: this.state.access_token,
+            //access_token: token,
+            'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `product_id=${product_id}&rating=${userRating}`
+        }).then((response)=>response.json())
+        .then((responseJson)=>{
+            console.log(responseJson)
+            
+        })
+        .catch(error => {
+            console.error(error);
+          });
+    }
     
     onButtonClick(){
         this.setQuantityModalVisible(!this.state.quantityModalVisible);
         this.addToCart();
     }
+
+    onRatingButtonClick(){
+        this.setRatingModalVisible(!this.state.ratingModalVisible);
+        this.setRatings();
+    }
+
+    updateRating(rate){
+        this.setState({defaultRating: rate})
+    }
+
+    
 
     setQuantityModalVisible(visible){
         this.setState({quantityModalVisible: visible});
@@ -62,6 +105,10 @@ export default class ProductDetails extends Component{
       });
 
     componentDidMount(){
+        this.productDetail()
+    }
+
+    productDetail(){
         const { navigation } = this.props;
         const product_id = navigation.getParam("productID", "1")
         fetch(`http://staging.php-dev.in:8844/trainingapp/api/products/getDetail?product_id=${product_id}`)
@@ -93,7 +140,7 @@ export default class ProductDetails extends Component{
     renderImages(){
         return this.state.productImages.map(item=> {
             return(
-                <TouchableOpacity onPress={()=>this.setState({largeImage: item.image})}>
+                <TouchableOpacity onPress={()=>this.setState({largeImage: item.image})} key={item.image}>
                     <Image style={{width: 78, height: 69, marginTop: 20,margin: 5,borderColor: 'black',borderWidth: 1}} source= {{uri: item.image}}/>
                 </TouchableOpacity>
             );
@@ -115,9 +162,17 @@ export default class ProductDetails extends Component{
     render(){
         console.log(this.state.datasource)
         console.log(this.state.largeImage)
-        console.log(this.state.product_category_id)
+        console.log(this.state.product_id)
+
+        let RatingBar = []
+          for(i=1;i<=this.state.maxRating;i++){
+          RatingBar.push(
+            <TouchableOpacity activeOpacity={0.7} key={i} onPress={this.updateRating.bind(this,i)}>
+               <Image style={{height: 50,width: 50,resizeMode: 'cover'}} source={i<=this.state.defaultRating?R.images.star_check:R.images.star_unchek}/>
+           </TouchableOpacity>
+           )
+        } 
         
-        //console.log(this.state.datasource.productImages[0].image)
         return(
             <View style={{flex: 1}}>
                 <ScrollView nestedScrollEnabled>
@@ -153,50 +208,39 @@ export default class ProductDetails extends Component{
 
                         <View style={{marginTop: 20, marginRight: 20}}>
                           <Text style={{color: "#111111",fontWeight: 'bold',fontSize: 18, marginLeft: 20}}>DESCRIPTION:</Text>
-                          <ScrollView nestedScrollEnabled> 
+                          {/* <ScrollView nestedScrollEnabled>  */}
                           <Text style={{marginTop: 5, paddingLeft: 10,fontWeight: 'bold', color: '#333333',fontSize: 14, marginLeft: 10}}>{this.state.datasource.description}</Text>
-                          </ScrollView>
+                          {/* </ScrollView> */}
                         </View>
                         </ScrollView>
 
                         <View style={{flexDirection: 'row',marginTop: 26,marginRight: 14,marginBottom:26,marginLeft: 14}}>
                             <Modal 
-                            animationType="slide"
+                            animationType="fade"
                             transparent={true}
                             visible={this.state.quantityModalVisible}>
-                            
-                            <View style={{flex:1, }}>
-                                <View style={{opacity: 0.5, flex: 6, backgroundColor: '#000'}}>
+                                <View style={{opacity: 0.5, backgroundColor: '#000'}}>
                                     <TouchableOpacity onPress={()=>this.setQuantityModalVisible(!this.state.quantityModalVisible)} style={{flex:1}}/>
                                 </View>
-                                                           
-                                <View style={{justifyContent: 'center', alignItems: 'center', backgroundColor:'#fff', height: 400 }}>
-                                    
-                                    <Text style={{fontSize: 20,fontWeight:'bold',color: '#2C2B2B', paddingTop: 20 }}>{this.state.datasource.name}</Text>
-                                    <View style={{marginTop: 33}}>
-                                    { this.renderLargeImage()} 
-                                    </View> 
-                                     
-                                    <TextInput style={{fontSize: 20,padding: 20 }} placeholder="Enter Quantity" 
+                            
+                            <View style={{flex: 1,backgroundColor: '#a9a9a9'}}>
+                                <View style={modalStyles.modal}>
+                                <Text style={{fontSize: 20,fontWeight:'bold',color: '#2C2B2B', paddingTop: 20 }}>{this.state.datasource.name}</Text>
+                                <View style={{padding: 40}}>{ this.renderLargeImage()}</View>
+                                <Text style={{fontSize: 18, fontWeight: 'bold', paddingHorizontal: 100}}>Enter Quantity</Text>
+                                <View style={{justifyContent: 'center', alignItems: 'center', paddingVertical: 10}}>
+                                <TextInput style={{fontSize: 20,paddingBottom: 10,paddingTop: 10,borderWidth: 3,borderRadius: 10,borderColor:'#000000', width: 120,height: 50, textAlign: 'center'}} 
                                     onChangeText={quantity=>
                                     this.setState({quantity: quantity})} />
-                                    
-                                    <View style={{width: '70%', justifyContent:'center', alignItems: 'center'}}>
-                                    <TouchableOpacity 
-                                    style={{
-                                        backgroundColor: 'red',borderRadius: 8,
-                                        padding: 10,
-                                        width: 176,height: 42,
-                                        justifyContent: 'center',
-                                        alignItems: 'center'
-                                    }}
+                                </View>
+                                <View style={{backgroundColor: 'red',height: 42, width: 176,justifyContent: 'center'}}>
+                                <TouchableOpacity 
                                     onPress={()=> this.onButtonClick()}>
-                                        <Text style={{color: 'white',fontSize: 23, fontWeight: 'bold', paddingBottom: 5}}>SUBMIT</Text>
+                                        <Text style={{color: 'white',fontSize: 23, fontWeight: 'bold', textAlign: 'center',borderRadius: 8}}>SUBMIT</Text>
                                     </TouchableOpacity>
-                                    </View>
+                                </View>
                                 </View>
                             </View>
-
                                 
                             </Modal>
                             <TouchableOpacity style={{width: 160, height: 45,backgroundColor: '#E91C1A', borderRadius: 10}}
@@ -209,36 +253,26 @@ export default class ProductDetails extends Component{
 
 
                             <Modal 
-                            animationType="slide"
+                            animationType="fade"
                             transparent={true}
                             visible={this.state.ratingModalVisible}>
                             
-                            <View style={{flex:1}}>
-                                <View style={{opacity: 0.5, flex: 6, backgroundColor: '#000'}}>
-                                    <TouchableOpacity onPress={()=>this.setRatingModalVisible(!this.state.ratingModalVisible)} style={{flex:1}}/>
-                                </View>
+                            <View style={{flex: 1,backgroundColor: '#a9a9a9'}}>
                                                            
-                                <View style={{justifyContent: 'center', alignItems: 'center', backgroundColor:'#fff', height: 400 }}>
+                            <View style={modalStyles.modal}>
                                     
                                     <Text style={{fontSize: 20,fontWeight:'bold',color: '#2C2B2B', paddingTop: 20 }}>{this.state.datasource.name}</Text>
-                                    <View style={{marginTop: 33}}>
-                                    { this.renderLargeImage()} 
-                                    </View> 
+                                    <View style={{padding: 40}}>{ this.renderLargeImage()}</View> 
                                      
                                     {/* <TextInput style={{fontSize: 20,padding: 20 }} placeholder="Enter Quantity" /> */}
-                                    <Text>{this.state.datasource.rating}</Text>
+                                    {/* <Text>{this.state.datasource.rating}</Text> */}
+                                    <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 10, paddingBottom: 10,flexDirection: 'row'}}>{RatingBar}</View>
                                     
-                                    <View style={{width: '70%', justifyContent:'center', alignItems: 'center'}}>
+                                    <View style={{backgroundColor: 'red',height: 42, width: 176,justifyContent: 'center'}}>
                                     <TouchableOpacity 
-                                    style={{
-                                        backgroundColor: 'red',borderRadius: 8,
-                                        padding: 10,
-                                        width: 176,height: 42,
-                                        justifyContent: 'center',
-                                        alignItems: 'center'
-                                    }}
-                                    onPress={()=> {this.setRatingModalVisible(!this.state.ratingModalVisible);}}>
-                                        <Text style={{color: 'white',fontSize: 23, fontWeight: 'bold'}}>RATE NOW</Text>
+                                    //onPress={()=> {this.setRatingModalVisible(!this.state.ratingModalVisible);}}>
+                                    onPress={()=> this.onRatingButtonClick()}>
+                                        <Text style={{color: 'white',fontSize: 23, fontWeight: 'bold', textAlign: 'center',borderRadius: 8}}>RATE NOW</Text>
                                     </TouchableOpacity>
                                     </View>
                                 </View>
@@ -254,13 +288,25 @@ export default class ProductDetails extends Component{
                            }}>
                                 <Text style={{fontSize: 18, fontWeight: '500',color: '#5C5858', textAlign: 'center', paddingVertical: 10}}>RATE</Text>
                             </TouchableOpacity>
-
-
                         </View>
-
              </View>                
         )
     }
-
-    
 }
+
+const modalStyles = StyleSheet.create({
+   modal: {
+       flex: 1,
+       justifyContent: 'center',
+       alignItems: 'center',
+       backgroundColor: 'white',
+       marginTop: 100,
+       marginBottom: 100,
+       marginLeft: 20,
+       marginRight: 20,
+       borderWidth: 2,
+       borderColor: '#4f4f4f'
+    }
+    
+
+})

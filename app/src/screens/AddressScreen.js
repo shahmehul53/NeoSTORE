@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button,FlatList,Image, TextInput,Alert } from 'react-native';
+import { View, Text, StyleSheet, Button,FlatList,Image, TextInput,Alert,AsyncStorage } from 'react-native';
 
 import R from '../R';
 import CustomButtom from '../components/CustomButton';
@@ -11,16 +11,20 @@ export default class AddressScreen extends Component{
         super()
         this.state = {
             datasource: [],
-            address: ""
+            address: "",
+            access_token: ""
         }
     }
 
-    placeOrder(){
+    async  placeOrder(){
         const address = this.state.address;
+        const { navigate } = this.props.navigation;
+        const token = await AsyncStorage.getItem("@storage_Key_token")
         fetch('http://staging.php-dev.in:8844/trainingapp/api/order',{
             method: 'POST',
             headers:{
-             'access_token': "5d2eb4b6ca059",
+             //'access_token': "5d2eb4b6ca059",
+             access_token: token,
              'Content-Type': 'application/x-www-form-urlencoded',
              },
              body:
@@ -29,6 +33,9 @@ export default class AddressScreen extends Component{
          .then((responseJson)=>{
              this.setState({datasource: responseJson})
              if(this.state.datasource.status == 200){
+                 setTimeout(function(){
+                     navigate("Home");
+                 }, 2000);
                  alert(this.state.datasource.user_msg)
              } 
              else if(this.state.datasource.status == 401){
@@ -47,7 +54,10 @@ export default class AddressScreen extends Component{
                 <View style={styles.addressContent}>
                     <Text style={styles.addresText} >ADDRESS:</Text>
                 
-                    <TextInput style={styles.textInputStyle} onChangeText={address => this.setState({ address })}/> 
+                    <TextInput style={styles.textInputStyle}
+                     onChangeText={address => this.setState({ address })}
+                     multiline={true}
+                     numberOfLines={4}/>  
                 <CustomRedButton 
                        title="PLACE ORDER"
                        onPress={()=>this.placeOrder()}
@@ -97,7 +107,7 @@ const styles = StyleSheet.create({
     textInputStyle:{
         borderWidth:1.5,
         borderColor: 'black',
-        height:41,
+        height:100,
         width:300,
         margin: 5,
         marginLeft: 10,

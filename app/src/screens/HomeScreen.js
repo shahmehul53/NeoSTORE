@@ -67,7 +67,7 @@ export default class HomeScreen extends Component {
                         </TouchableOpacity>
                         </View>
                     }  
-                       //keyExtractor={extractKey}
+                      keyExtractor={(item, index) => index.toString()}
                        numColumns={2}
                     />
                 </View>

@@ -7,6 +7,7 @@ import CustomButton from '../components/CustomButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CustomActivityIndicator from '../components/CustomActivityIndicator';
 
+
 export default class LoginScreen extends Component {
    constructor(){
        super()
@@ -18,11 +19,13 @@ export default class LoginScreen extends Component {
        }
    } 
 
-   loginUser(username,password){
+   loginUser(){
+       const username = this.state.username
+       const password = this.state.password
        fetch('http://staging.php-dev.in:8844/trainingapp/api/users/login',{
            method: 'POST',
            headers:{
-            'access_token': "5d2eb4b6ca059",
+            //'access_token': "5d2eb4b6ca059",
             'Content-Type': 'application/x-www-form-urlencoded',
             },
             body:
@@ -45,9 +48,16 @@ export default class LoginScreen extends Component {
         if (this.state.datasource.status == 200) {
             this.setState({
                 isLoading: !this.state.isLoading
-            }),setTimeout(function(){
+            }),
+            this.saveData(
+                "" + this.state.datasource.data.first_name,
+                "" + this.state.datasource.data.last_name,
+                "" + this.state.datasource.data.email,
+                "" + this.state.datasource.data.access_token
+            ),
+            setTimeout(function(){
                 navigate("Home");
-            },2000);
+            },1000);
         } else if (this.state.datasource.status == 401) {
             alert(this.state.datasource.user_msg);
         } else if (this.state.datasource.status == 400) {
@@ -57,7 +67,18 @@ export default class LoginScreen extends Component {
         }
     }
 
-    
+    async saveData(val1,val2,val3,val4){
+        const fname = ["@storage_Key_fname", val1];
+        const lname = ["@storage_Key_lname", val2];
+        const email = ["@storage_Key_email", val3];
+        const access_token = ["@storage_Key_token",val4];
+        try{
+            await AsyncStorage.multiSet([fname,lname,email,access_token])
+        } catch(e){
+            console.log("Failed to retrieve data"+error)
+        }
+        console.log("Done")
+    }
 
     loadingView(){
         if(this.state.isLoading){
@@ -70,11 +91,11 @@ export default class LoginScreen extends Component {
             <View style={style.container}>
                 <View style={{flex: 9, justifyContent: 'center',alignItems: 'center'}}>
                   <Text style={style.headerTitleStyle}>{R.strings.AppName}</Text> 
-                  <CustomTextInput sourceImage={R.images.username_icon} placeholderValue='Username' keyboardType="email-address" onChangeText={(username)=>this.setState({username})}></CustomTextInput>
-                  <CustomTextInput sourceImage={R.images.password_icon} placeholderValue='Password' secureTextEntry = {true} onChangeText={(password)=>this.setState({password})}></CustomTextInput>
+                  <CustomTextInput sourceImage={R.images.username_icon} placeholderValue='Username' keyboardType="email-address" autoCapitalize="none" onChangeText={(username)=>this.setState({username})}></CustomTextInput>
+                  <CustomTextInput sourceImage={R.images.password_icon} placeholderValue='Password' secureTextEntry = {true} autoCapitalize="none" onChangeText={(password)=>this.setState({password})}></CustomTextInput>
                   <CustomButton title='LOGIN' 
-                     onPress={()=> this.props.navigation.navigate('Home')}
-                      // onPress={()=> this.loginUser(this.state.username,this.state.password)}
+                     //onPress={()=> this.props.navigation.navigate('Home')}
+                       onPress={()=> this.loginUser()}
                    ></CustomButton>
                   <TouchableOpacity onPress={()=>{this.props.navigation.navigate('ForgotPassword')}}>
                       <Text style={style.forgotBtn}>Forgot Password?</Text>
@@ -94,15 +115,14 @@ export default class LoginScreen extends Component {
                             <View style={{ justifyContent: 'flex-end',alignItems: 'flex-start'}}>
                                <Image source={R.images.Plus} style={{height: 20, width: 20}} ></Image>
                              </View>
-                        </View>
-                        
+                        </View>    
                     </TouchableHighlight>
                 </View>
             </View>
         );
     }
-
 }
+
 
 const styles=StyleSheet.create({
     regAccountText: {
@@ -110,9 +130,6 @@ const styles=StyleSheet.create({
         fontSize: 14,
         marginLeft: 30,
         fontWeight: 'bold',
-        paddingRight: 80,
-        
-        
-        
+        paddingRight: 80,   
     },
 })

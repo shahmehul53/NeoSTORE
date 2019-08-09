@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button,FlatList,Image } from 'react-native';
+import { View, Text, StyleSheet, Button,FlatList,Image,AsyncStorage, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import R from '../R';
 
@@ -9,20 +9,27 @@ export default class OrderDetailsScreen extends Component {
         this.state = {
             datasource: [],
             cost: "",
-            address: ""
+            address: "",
+            access_token: ""
         }
     }
     static navigationOptions = ({ navigation }) => ({
         title: "OrderID: " + navigation.getParam("OrderID", "2031")
       });
 
-    componentDidMount() {
+   componentDidMount() {
+       this.OrderDetails()
+   }
+   
+    async OrderDetails(){
         const { navigation } = this.props;
         const order_id = navigation.getParam("OrderID","2031");
+        const token = await AsyncStorage.getItem("@storage_Key_token");
         fetch(`http://staging.php-dev.in:8844/trainingapp/api/orderDetail?order_id=${order_id}`,{
            method: 'GET',
            headers:{
-            'access_token': "5d2eb4b6ca059",
+            //'access_token': "5d2eb4b6ca059",
+            access_token: token,
             'Content-Type': 'application/x-www-form-urlencoded',
             },
         }).then((response)=>response.json())
@@ -39,6 +46,8 @@ export default class OrderDetailsScreen extends Component {
             console.error(err)
         })
     }
+        
+    
 
     render(){
         console.log(this.state.datasource)
@@ -57,13 +66,14 @@ export default class OrderDetailsScreen extends Component {
                         <View style={{flex: 2, paddingLeft: 15}}>
                             <Text style={styles.prodName}>{item.prod_name}</Text>
                             <Text style={styles.categoryText}>({item.prod_cat_name})</Text>
-                            <Text style={{paddingTop: 10}}>QTY:{item.quantity}</Text>
+                            <Text style={{paddingTop: 10}}>QTY: {item.quantity}</Text>
                         </View>
                         <View style={{flex: 1, paddingTop: 44}}>
                             <Text style={styles.amtText}>Rs.{item.total}</Text>
                         </View>
                     </View>
                 )}
+                keyExtractor={(item, index) => index.toString()}
                 />
                 <View style={{flex: 3, flexDirection: 'row'}}>
                     <View style={{flex:4, paddingLeft: 20}}>
@@ -80,7 +90,9 @@ export default class OrderDetailsScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex : 1
+        flex : 1,
+        // width: Dimensions.get('window').width;
+        // height: Dimensions.get('window').height
     },
     
     prodName:{

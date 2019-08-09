@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Dimensions, TouchableOpacity, Image} from 'react-native';
+import {StyleSheet, Text, View, Dimensions, TouchableOpacity, Image,AsyncStorage} from 'react-native';
 import R from '../R';
 import style from '../Styles'
 import { withOrientation } from 'react-navigation';
@@ -9,6 +9,15 @@ import { withOrientation } from 'react-navigation';
 
 
 export default class MenuDrawer extends Component{
+    constructor(){
+        super()
+        this.state = {
+            datasource: [], 
+            access_token: "",
+            cartCount: ""
+        }
+    }
+
     navLink(nav, text) {
         return(
         <TouchableOpacity style={{height: 50}} onPress={() => this.props.navigation.navigate(nav)}>
@@ -17,9 +26,35 @@ export default class MenuDrawer extends Component{
         )
     }
 
-    userLogout(){
-        return  this.props.navigation.navigate("Login")
+     componentDidMount(){
+         this.fetchData()
+     }   
+
+    async fetchData(){
+        const token = await AsyncStorage.getItem("@storage_Key_token");
+        this.setState({ access_token: token });
+        console.log(token);
+        fetch('http://staging.php-dev.in:8844/trainingapp/api/users/getUserData',{
+           method: 'GET',
+           headers:{
+            //'access_token': "5d2eb4b6ca059",
+            access_token: token,
+            'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        }).then((response)=>response.json())
+        .then((responseJson)=>{
+            console.log(responseJson)
+            this.setState(
+                {
+                    datasource: responseJson.data.user_data,
+                    cartCount: responseJson.data.total_carts
+                }
+            ) 
+        }).catch((err)=> {
+            console.error(err)
+        })
     }
+
 
     render(){
         return(
@@ -29,8 +64,8 @@ export default class MenuDrawer extends Component{
                 <View style={styles.profile}>
                     <View style={styles.imgView}>
                         <Image style={styles.img} source={R.images.profile} />
-                        <Text style={styles.name}>Mehul Shah</Text>
-                        <Text style={{fontSize: 15, paddingBottom: 5, color: 'white'}}>shahmehul53@gmail.com</Text>
+                        <Text style={styles.name}>{this.state.datasource.first_name} {this.state.datasource.last_name}</Text>
+                        <Text style={{fontSize: 15, paddingBottom: 5, color: 'white'}}>{this.state.datasource.email}</Text>
                     </View>
                 </View>
             </View>
@@ -39,12 +74,12 @@ export default class MenuDrawer extends Component{
                 <View style={styles.SectionStyle}>
                     <Image style={styles.imgIcon} source={R.images.shopping_cart}/>
                     {this.navLink('MyCart', 'My Cart')}
+                    <Text style={{fontSize: 25,color: "white",paddingLeft: 40}} >{this.state.cartCount}</Text> 
                     
                 </View>
                 <View style= {styles.SectionStyle}>
                     <Image style= {styles.imgIcon} source={R.images.table}/>
                     {this.navLink('Tables', 'Tables')}
-                    
                 </View>
                 <View style= {styles.SectionStyle}>
                     <Image style= {styles.imgIcon} source={R.images.sofa}/>
@@ -72,7 +107,10 @@ export default class MenuDrawer extends Component{
                 </View>
                 <View style= {styles.SectionStyle}>
                 <Image style= {styles.imgIcon} source={R.images.logout_icon}/>
-                <TouchableOpacity style={{height: 50}} onPress={() => this.userLogout()}>
+                <TouchableOpacity style={{height: 50}} 
+                //onPress={() => this.userLogout()}
+                onPress={() => this.props.navigation.navigate("Login")}
+                >
                     <Text style={styles.links}>Logout</Text>
                 </TouchableOpacity>
                 </View>
@@ -103,7 +141,6 @@ const styles = StyleSheet.create({
     },
     name: {
         fontSize: 20,
-        //flexDirection: 'column',
         justifyContent: 'center',
         color: 'white',
         paddingTop: 10
@@ -113,15 +150,12 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 20,
         justifyContent: 'center',
-        alignItems: 'center'
-        
-        
+        alignItems: 'center'  
     },
     img:{
         height: 100,
         width: 100,
-        borderRadius: 50,
-        
+        borderRadius: 50,    
     },
     imgIcon:{
         height: 25,
@@ -146,6 +180,4 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'white'
     }
-
-
 })

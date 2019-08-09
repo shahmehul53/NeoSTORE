@@ -87,6 +87,7 @@ export default class Sofas extends Component {
                     //  </View>
 
                   )}
+                  keyExtractor={(item, index) => index.toString()}
                 />
             </View>
         );

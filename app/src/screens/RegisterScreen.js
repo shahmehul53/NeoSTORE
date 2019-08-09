@@ -1,20 +1,27 @@
 import React, {Component} from 'react';
-import {View, Button, Image, TextInput, Text,ScrollView,Alert} from 'react-native';
+import {View, Button, Image, TextInput, Text,ScrollView,Alert,Dimensions,StyleSheet} from 'react-native';
 import R from '../R'
 import style from '../Styles'
 import CustomTextInput from '../components/CustomTextInput'
 import CustomButton from '../components/CustomButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CustomActivityIndicator from '../components/CustomActivityIndicator';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
+//  widthScreen: Dimensions.get('window').width;
+//  heightScreen: Dimensions.get('window').height
+//const { width, height } = Dimensions.get('window');
+ let entireScreenWidth = Dimensions.get('window').width;
 
+ EStyleSheet.build({$rem: entireScreenWidth / 380});
 
 export default class RegisterScreen extends Component {
+   
 
     constructor() {
-        super()
-        datasource: [],
+        super()    
         this.state = {
+            datasource: [],
             checked: false,
             image: R.images.uncheck_icon,
             gender: "M",
@@ -27,7 +34,8 @@ export default class RegisterScreen extends Component {
             confirm_password: "",
             phone_no: "",
             datasource: [],
-            checkButtonCondition: false,
+            //checkButtonCondition: false,
+            isLoading: false
         };   
     }
 
@@ -54,16 +62,36 @@ export default class RegisterScreen extends Component {
         if (this.state.datasource.status == 200) {
             this.setState({
                 isLoading: !this.state.isLoading
-            }),setTimeout(function(){
+            }),
+            this.saveData(
+                "" + this.state.datasource.data.first_name,
+                "" + this.state.datasource.data.last_name,
+                "" + this.state.datasource.data.email,
+                "" + this.state.datasource.data.access_token
+            ),
+            setTimeout(function(){
                 navigate("Login");
             },2000);
         } else if (this.state.datasource.status == 401) {
             alert(this.state.datasource.user_msg);
         } else if (this.state.datasource.status == 400) {
             alert(this.state.datasource.user_msg);
-        } else if (this.state.datasource.status == 404){
+        } else if (this.state.datasource.status == 422){
             alert(this.state.datasource.user_msg);
         }
+    }
+
+    async saveData(val1,val2,val3,val4){
+        const fname = ["@storage_Key_fname", val1];
+        const lname = ["@storage_Key_lname", val2];
+        const email = ["@storage_Key_email", val3];
+        const access_token = ["@storage_Key_token",val4];
+        try{
+            await AsyncStorage.multiSet([fname,lname,email,access_token])
+        } catch(e){
+            console.log("Failed to retrieve data")
+        }
+        console.log("Done")
     }
 
     loadingView(){
@@ -120,12 +148,13 @@ export default class RegisterScreen extends Component {
             <View style={style.container}>
                 <View style={style.RegisterView}>
                 
+                
                 <Text style={style.headerTitleStyle}>{R.strings.AppName}</Text>
-                <CustomTextInput sourceImage={R.images.username_icon} placeholderValue='First Name' onChangeText={(first_name)=>this.setState({first_name})}></CustomTextInput>
-                <CustomTextInput sourceImage={R.images.username_icon} placeholderValue='Last Name' onChangeText={(last_name)=>this.setState({last_name})}></CustomTextInput>
-                <CustomTextInput sourceImage={R.images.email_icon} placeholderValue='Email' onChangeText={(email)=>this.setState({email})}></CustomTextInput>
-                <CustomTextInput sourceImage={R.images.password_icon} placeholderValue='Password' onChangeText={(password)=>this.setState({password})}></CustomTextInput>
-                <CustomTextInput sourceImage={R.images.password_icon} placeholderValue='Confirm Password' onChangeText={(confirm_password)=>this.setState({confirm_password})}></CustomTextInput>
+                <CustomTextInput sourceImage={R.images.username_icon} placeholderValue='First Name' autoCapitalize="none" onChangeText={(first_name)=>this.setState({first_name})}></CustomTextInput>
+                <CustomTextInput sourceImage={R.images.username_icon} placeholderValue='Last Name' autoCapitalize="none" onChangeText={(last_name)=>this.setState({last_name})}></CustomTextInput>
+                <CustomTextInput sourceImage={R.images.email_icon} placeholderValue='Email' autoCapitalize="none" onChangeText={(email)=>this.setState({email})}></CustomTextInput>
+                <CustomTextInput sourceImage={R.images.password_icon} placeholderValue='Password' secureTextEntry={true} autoCapitalize="none" onChangeText={(password)=>this.setState({password})}></CustomTextInput>
+                <CustomTextInput sourceImage={R.images.password_icon} placeholderValue='Confirm Password' secureTextEntry={true} autoCapitalize="none" onChangeText={(confirm_password)=>this.setState({confirm_password})}></CustomTextInput>
                 
                 <View style={style.genderStyleContainer}>
                     <Text style={style.genderText}>Gender</Text>
@@ -146,7 +175,7 @@ export default class RegisterScreen extends Component {
                     </View>
                 </View>
                 
-                <CustomTextInput sourceImage={R.images.cellphone} placeholderValue='Phone Number' onChangeText={phone_no=>this.setState({phone_no})}></CustomTextInput>
+                <CustomTextInput sourceImage={R.images.cellphone} placeholderValue='Phone Number' keyboardType="numeric" onChangeText={phone_no=>this.setState({phone_no})}></CustomTextInput>
                 
                 <View style={{flexDirection: 'row' ,margin: 10}}>
                     <TouchableOpacity onPress={this.handleCheckBox}>
@@ -158,9 +187,32 @@ export default class RegisterScreen extends Component {
                 <CustomButton title='REGISTER' onPress={()=> 
                     // this.registeredUSer("abc","def","abc@gmail.com","abc123","abc123","M",9874563210)}/>
                  this.registerUser(this.state.first_name,this.state.last_name,this.state.email,this.state.password,this.state.confirm_password,this.state.gender,this.state.phone_no)} ></CustomButton> 
+                 {this.loadingView()}
                 </View>
+                
             </View>
 
         )
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        height: "100%",
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 8
+    },
+        
+    
+    RegisterView:{
+        width: "100%",
+        //aspectRatio: 2,
+        //flexDirection: "row",
+        borderWidth: 1,
+        borderColor: '#d6d7da',
+        backgroundColor: "white",
+    }
+})
+    

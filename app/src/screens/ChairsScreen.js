@@ -18,9 +18,10 @@ export default class Chairs extends Component {
 
 
     componentDidMount() {
-        //console.log('COMPONENT DID MOUNT')
+        this.chairsData()
+    }
+    chairsData(){
         categoryId=2
-        // ${categoryId}
         fetch("http://staging.php-dev.in:8844/trainingapp/api/products/getList?product_category_id=2")
         .then((response)=> response.json())
         .then((responseJson)=>{
@@ -33,21 +34,6 @@ export default class Chairs extends Component {
             console.error(err)
         })
     }
-
-    // renderItems(){
-    //     return(
-    //       this.state.items.map((item)=>
-    //       <ScrollView>
-    //         <TouchableOpacity>
-    //         //onPress={()=>{
-    //           //this.props.navigation.navigate('Detail',{productId:item.id})
-    //           }}>  
-    //          <ItemDetail itemImage={item.product_images} itemName={item.name} itemProducer={item.producer} itemCost={item.cost} itemRating={item.rating} />
-    //          </TouchableOpacity>
-    //       </ScrollView>
-    //       )
-    //     )
-    //   }
 
     render(){
         
@@ -87,6 +73,7 @@ export default class Chairs extends Component {
                     //  </View>
 
                   )}
+                  keyExtractor={(item, index) => index.toString()}
                 />
             </View>
         );

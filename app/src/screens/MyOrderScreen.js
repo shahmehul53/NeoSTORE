@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button,FlatList,Image } from 'react-native';
+import { View, Text, StyleSheet, Button,FlatList,Image,AsyncStorage } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import R from '../R';
 
@@ -7,15 +7,22 @@ export default class MyOrderScreen extends Component {
     constructor(){
         super()
         this.state = {
-            datasource: []
+            datasource: [],
+            access_token: ""
         }
     }
 
-    componentDidMount() {
+     componentDidMount() {
+         this.listOrder()
+     }
+
+     async listOrder(){
+        const token = await AsyncStorage.getItem("@storage_Key_token");
         fetch('http://staging.php-dev.in:8844/trainingapp/api/orderList',{
            method: 'GET',
            headers:{
-            'access_token': "5d2eb4b6ca059",
+            //'access_token': "5d2eb4b6ca059",
+            access_token: token,
             'Content-Type': 'application/x-www-form-urlencoded',
             },
         }).then((response)=>response.json())
@@ -30,7 +37,8 @@ export default class MyOrderScreen extends Component {
         }).catch((err)=> {
             console.error(err)
         })
-    }
+      }
+        
     render(){
         return(
             <View style={styles.container}>
@@ -58,6 +66,7 @@ export default class MyOrderScreen extends Component {
                     </View>
                     </TouchableOpacity>
                 )}
+                keyExtractor={(item, index) => index.toString()}
                 />
             </View>
         )

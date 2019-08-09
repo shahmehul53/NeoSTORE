@@ -31,7 +31,7 @@ export default class LaunchScreen extends Component {
             isLoading: !this.state.isLoading
         }),setTimeout(function(){
             navigate("Login");
-        },2000);
+        },5000);
     }
 
     render(){
@@ -39,7 +39,7 @@ export default class LaunchScreen extends Component {
             <View style={styles.container}>
                 <Text style={styles.title}>Welcome to {"\n"}NEOSTORE</Text>
                 <View style={{height:80,width:80,borderRadius:10,alignItems:'center', justifyContent:'center'}}>   
-                    <BallIndicator color='white'/>
+                    <SkypeIndicator color='white'/>
                 </View>
             </View>
         )
