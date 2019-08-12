@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button,Image,AsyncStorage } from 'react-native';
+import { View, Text, StyleSheet, Button,Image,AsyncStorage,KeyboardAvoidingView } from 'react-native';
 import R from '../R';
 import CustomTextInput from '../components/CustomTextInput'
 import CustomButton from '../components/CustomButton';
@@ -50,6 +50,7 @@ export default class MyAccountScreen extends Component {
     render(){  
         return(
         <View style={style.container}>
+            <KeyboardAvoidingView  behavior="padding" enabled>
                 <View style={styles.imgView}>
                 <Image style={styles.imgStyle} source={R.images.user_male}/>
                 </View>
@@ -112,6 +113,7 @@ export default class MyAccountScreen extends Component {
                     </TouchableOpacity>
                 </View>
             </View>
+            </KeyboardAvoidingView>
     </View>
         )
     }

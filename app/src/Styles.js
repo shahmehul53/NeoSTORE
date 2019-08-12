@@ -36,14 +36,15 @@ const style=StyleSheet.create({
     buttonStyle: {
         backgroundColor:'white',
         color:'red',
-        marginTop:21,
+        marginHorizontal:30,
+        marginVertical: 15,
         width:300,
         height:51,
         alignItems:'center',
         justifyContent:'center',
-        textAlign:'center',
+        //textAlign:'center',
         borderRadius:5,
-        fontSize:20
+        //fontSize:20
     },
     forgotBtn: {
         marginTop: 10,
@@ -164,10 +165,7 @@ const style=StyleSheet.create({
         color: '#5c5858',
         textAlign: 'center',
         paddingVertical: 10,
-    },
-
-    
-    
+    }, 
 
 })
 

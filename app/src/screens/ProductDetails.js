@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Button, Image, TextInput, Text,ScrollView,TouchableOpacity,Modal, AsyncStorage,StyleSheet} from 'react-native';
+import {View,KeyboardAvoidingView, Button, Image, TextInput, Text,ScrollView,TouchableOpacity,Modal, AsyncStorage,StyleSheet} from 'react-native';
 import R from '../R';
 import style from '../Styles'
 import { TouchableHighlight } from 'react-native-gesture-handler';
@@ -214,7 +214,10 @@ export default class ProductDetails extends Component{
                         </View>
                         </ScrollView>
 
+                        {/* <KeyboardAvoidingView  behavior="padding" enabled> */}
+
                         <View style={{flexDirection: 'row',marginTop: 26,marginRight: 14,marginBottom:26,marginLeft: 14}}>
+                        <KeyboardAvoidingView  behavior="padding" enabled>
                             <Modal 
                             animationType="fade"
                             transparent={true}
@@ -224,6 +227,7 @@ export default class ProductDetails extends Component{
                                 </View>
                             
                             <View style={{flex: 1,backgroundColor: '#a9a9a9'}}>
+                            {/* <KeyboardAvoidingView  behavior="padding" enabled> */}
                                 <View style={modalStyles.modal}>
                                 <Text style={{fontSize: 20,fontWeight:'bold',color: '#2C2B2B', paddingTop: 20 }}>{this.state.datasource.name}</Text>
                                 <View style={{padding: 40}}>{ this.renderLargeImage()}</View>
@@ -233,16 +237,20 @@ export default class ProductDetails extends Component{
                                     onChangeText={quantity=>
                                     this.setState({quantity: quantity})} />
                                 </View>
-                                <View style={{backgroundColor: 'red',height: 42, width: 176,justifyContent: 'center'}}>
+                                {/* <View > */}
                                 <TouchableOpacity 
+                                  style={{backgroundColor: 'red',height: 42, width: 176,justifyContent: 'center'}}
                                     onPress={()=> this.onButtonClick()}>
                                         <Text style={{color: 'white',fontSize: 23, fontWeight: 'bold', textAlign: 'center',borderRadius: 8}}>SUBMIT</Text>
                                     </TouchableOpacity>
+                                {/* </View> */}
+                                
                                 </View>
-                                </View>
+                                {/* </KeyboardAvoidingView> */}
                             </View>
                                 
                             </Modal>
+                            </KeyboardAvoidingView>
                             <TouchableOpacity style={{width: 160, height: 45,backgroundColor: '#E91C1A', borderRadius: 10}}
                             onPress={()=>{
                                 this.setQuantityModalVisible(true);
@@ -250,8 +258,7 @@ export default class ProductDetails extends Component{
                             
                                 <Text style={{fontSize: 18, fontWeight: '500', color: '#FFFFFF', textAlign: 'center', paddingVertical: 10}}>BUY NOW</Text>
                             </TouchableOpacity>
-
-
+                            
                             <Modal 
                             animationType="fade"
                             transparent={true}
@@ -280,6 +287,7 @@ export default class ProductDetails extends Component{
 
                                 
                             </Modal>
+                            
 
 
                             <TouchableOpacity style={{marginLeft: 10, width: 160, height: 45, backgroundColor: '#9C908F',borderRadius: 10,alignContent: 'center', marginRight: 10,marginLeft: 20}}
@@ -289,6 +297,7 @@ export default class ProductDetails extends Component{
                                 <Text style={{fontSize: 18, fontWeight: '500',color: '#5C5858', textAlign: 'center', paddingVertical: 10}}>RATE</Text>
                             </TouchableOpacity>
                         </View>
+                        {/* </KeyboardAvoidingView> */}
              </View>                
         )
     }
@@ -300,8 +309,8 @@ const modalStyles = StyleSheet.create({
        justifyContent: 'center',
        alignItems: 'center',
        backgroundColor: 'white',
-       marginTop: 100,
-       marginBottom: 100,
+       marginTop: 150,
+       marginBottom: 150,
        marginLeft: 20,
        marginRight: 20,
        borderWidth: 2,

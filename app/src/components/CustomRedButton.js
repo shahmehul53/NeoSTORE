@@ -6,12 +6,12 @@ import R from '../R';
 
 const CustomRedButton = ({title, onPress} )=> {
     return(
-    <View style={styles.buttonStyle1}>
-        <TouchableOpacity onPress={()=> onPress()}>
+    
+        <TouchableOpacity style={styles.buttonStyle1} onPress={()=> onPress()}>
             <Text style={{fontSize: 23, color: R.color.textInputBorderColor,fontWeight: 'bold'}}>{title}</Text>
         </TouchableOpacity>
        
-    </View>
+   
     )
 
 }

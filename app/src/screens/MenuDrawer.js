@@ -91,7 +91,7 @@ export default class MenuDrawer extends Component{
                 </View>
                 <View style= {styles.SectionStyle}>
                     <Image style= {styles.imgIcon} source={R.images.cupboard}/>
-                    {this.navLink('Cupboard', 'Cupboards')}
+                    {this.navLink('Cupboards', 'Cupboards')}
                 </View>
                 <View style= {styles.SectionStyle}>
                     <Image style= {styles.imgIcon} source={R.images.username_icon}/>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'black'
     },
     bottomLinks:{
-        flex: 1,
+        //flex: 1,
         backgroundColor: 'black',
         paddingTop: 10,
         paddingBottom: 450,

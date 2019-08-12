@@ -23,6 +23,7 @@ import ResetPasswordScreen from './app/src/screens/ResetPasswordScreen';
 import AddressScreen from './app/src/screens/AddressScreen';
 import OrderDetailsScreen from './app/src/screens/OrderDetailsScreen';
 import LaunchScreen from './app/src/screens/LaunchScreen';
+import CustomDrawer from './app/src/components/CustomDrawer'
 
 
 

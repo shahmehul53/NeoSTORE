@@ -31,13 +31,14 @@ export default class LaunchScreen extends Component {
             isLoading: !this.state.isLoading
         }),setTimeout(function(){
             navigate("Login");
-        },5000);
+        },3000);
     }
 
     render(){
         return(
             <View style={styles.container}>
-                <Text style={styles.title}>Welcome to {"\n"}NEOSTORE</Text>
+                <Text style={styles.title}>Welcome to </Text>
+                <Text style={{fontSize: 40,fontWeight: 'bold',color: 'white'}}>NeoSTORE</Text>
                 <View style={{height:80,width:80,borderRadius:10,alignItems:'center', justifyContent:'center'}}>   
                     <SkypeIndicator color='white'/>
                 </View>
@@ -52,10 +53,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: R.color.backgroundColorDefault
+        //backgroundColor: '#6a5acd'
     },
     title:{
-        fontSize: 40,
-        fontWeight: 'bold',
+        fontSize: 20,
+        //fontWeight: 'bold',
         color: 'white'
     }
 

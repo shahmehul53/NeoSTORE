@@ -42,7 +42,7 @@ export default class ForgotPasswordScreen extends Component{
                  }, 3000);
                  
              } 
-             else if(this.state.datasource.status == 401){
+             else if(this.state.datasource.status == 400){
                 alert(this.state.datasource.user_msg)
              } 
              console.log(responseJson)

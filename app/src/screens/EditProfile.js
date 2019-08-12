@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button,Image,AsyncStorage } from 'react-native';
+import { View, Text, StyleSheet, Button,Image,AsyncStorage,KeyboardAvoidingView } from 'react-native';
 import R from '../R';
 import CustomTextInput from '../components/CustomTextInput'
 import CustomButton from '../components/CustomButton';
@@ -69,6 +69,7 @@ export default class EditProfleScreen extends Component {
     render(){
         return(
         <View style={style.container}>
+            <KeyboardAvoidingView  behavior="padding" enabled>
             {/* <View style={{flex: 9, paddingBottom: 20}}> */}
                 <View style={styles.imgView}>
                 <Image style={styles.imgStyle} source={R.images.profile}/>
@@ -89,7 +90,7 @@ export default class EditProfleScreen extends Component {
                 />
                 {this.loadingView()}
                 </View>
-           
+                </KeyboardAvoidingView>
          </View>
         )
     }

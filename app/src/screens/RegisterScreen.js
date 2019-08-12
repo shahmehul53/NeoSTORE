@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Button, Image, TextInput, Text,ScrollView,Alert,Dimensions,StyleSheet} from 'react-native';
+import {View, Button, Image, TextInput, Text,ScrollView,Alert,Dimensions,StyleSheet,KeyboardAvoidingView} from 'react-native';
 import R from '../R'
 import style from '../Styles'
 import CustomTextInput from '../components/CustomTextInput'
@@ -146,6 +146,7 @@ export default class RegisterScreen extends Component {
         console.log(this.state.datasource)
         return (
             <View style={style.container}>
+                <KeyboardAvoidingView  behavior="padding" enabled>
                 <View style={style.RegisterView}>
                 
                 
@@ -189,6 +190,7 @@ export default class RegisterScreen extends Component {
                  this.registerUser(this.state.first_name,this.state.last_name,this.state.email,this.state.password,this.state.confirm_password,this.state.gender,this.state.phone_no)} ></CustomButton> 
                  {this.loadingView()}
                 </View>
+                </KeyboardAvoidingView>
                 
             </View>
 

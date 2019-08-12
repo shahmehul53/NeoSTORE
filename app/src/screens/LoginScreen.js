@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
-import {View,StyleSheet, Button, Image, TextInput, Text, ActivityIndicator,AsyncStorage,Alert,TouchableHighlight} from 'react-native';
+import {View,Dimensions,StyleSheet,KeyboardAvoidingView, Button, Image, TextInput, Text, ActivityIndicator,AsyncStorage,Alert,TouchableHighlight} from 'react-native';
 import R from '../R'
 import style from '../Styles'
 import CustomTextInput from '../components/CustomTextInput'
 import CustomButton from '../components/CustomButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CustomActivityIndicator from '../components/CustomActivityIndicator';
+
+let winSize = Dimensions.get('window');
+console.log(winSize);
 
 
 export default class LoginScreen extends Component {
@@ -89,6 +92,7 @@ export default class LoginScreen extends Component {
     render(){
         return(
             <View style={style.container}>
+                 <KeyboardAvoidingView  behavior="padding" enabled>
                 <View style={{flex: 9, justifyContent: 'center',alignItems: 'center'}}>
                   <Text style={style.headerTitleStyle}>{R.strings.AppName}</Text> 
                   <CustomTextInput sourceImage={R.images.username_icon} placeholderValue='Username' keyboardType="email-address" autoCapitalize="none" onChangeText={(username)=>this.setState({username})}></CustomTextInput>
@@ -118,6 +122,7 @@ export default class LoginScreen extends Component {
                         </View>    
                     </TouchableHighlight>
                 </View>
+                </KeyboardAvoidingView>
             </View>
         );
     }

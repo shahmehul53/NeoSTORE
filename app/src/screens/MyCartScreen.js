@@ -125,13 +125,15 @@ export default class MyCartScreen extends Component {
         const swipeoutBtns = [
             {
               backgroundColor: '#fff',
+              
               component: (
-                <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
+                <View style={{ alignItems: 'center', marginTop: 20}}>
                 <TouchableOpacity  onPress={()=>this.deleteItem(this.state.pid)}>
                     <Image style={{height: 50, width: 50}} source={R.images.delete}/>
                 </TouchableOpacity>
                 </View>
-              )
+              ),
+              underlayColor: 'rgba(0, 0, 0, 1, 0.6)'
             }
           ]
 
@@ -144,7 +146,9 @@ export default class MyCartScreen extends Component {
                       renderItem={({ item }) => (
                         <Swipeout right={swipeoutBtns}
                         onOpen={()=>this.onSwipeOpen(item.product.id)}
-                        onClose={()=>this.onSwipeClose(item.product.id)}>
+                        onClose={()=>this.onSwipeClose(item.product.id)}
+                        autoClose={true}
+                        backgroundColor="transparent">
 
                         <View style={{flexDirection: 'row', margin: 10}}>
                             <View style={{flex: 1}}>
@@ -173,13 +177,13 @@ export default class MyCartScreen extends Component {
                                      step={1}
                                      initValue={item.quantity}
                                      valueType='integer'
-                                     rounded type='up-down'
+                                     rounded 
                                      textColor='#E91C1A' 
                                      iconStyle={{ color: 'white' }} 
                                      borderColor='black'
-                                    //  rightButtonBackgroundColor='#EA3788' 
-                                    //  leftButtonBackgroundColor='#E56B70'
-                                    upDownButtonsBackgroundColor = '#E91C1A'
+                                    rightButtonBackgroundColor='#E91C1A' 
+                                    leftButtonBackgroundColor='#E91C1A'
+                                    //upDownButtonsBackgroundColor = '#E91C1A'
                                     />  
                                     </View>
                                     {/* <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end'}}>
@@ -203,7 +207,7 @@ export default class MyCartScreen extends Component {
                     </View> 
                     
                 </View>
-                <View style={{flex: 1, justifyContent: 'flex-start ',alignItems: 'center'}}>
+                <View style={{flex: 1,alignItems: 'center'}}>
                        <CustomRedButton 
                        title="ORDER NOW"
                        onPress={()=>this.props.navigation.navigate("AddAddress")}>
@@ -214,7 +218,7 @@ export default class MyCartScreen extends Component {
         )
     } else {
         return(
-            <View style={{flex: 1,justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{flex: 1, alignItems: 'center'}}>
                 {/* <Image  source={R.images.cartEmpty}/> */}
                 <Text style={{fontSize: 25, color: R.color.backgroundColorDefault,fontWeight: 'bold', paddingTop: 20}}>Cart is Empty</Text>
             </View>
