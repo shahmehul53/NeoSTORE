@@ -95,11 +95,11 @@ export default class LoginScreen extends Component {
                  <KeyboardAvoidingView  behavior="padding" enabled>
                 <View style={{flex: 9, justifyContent: 'center',alignItems: 'center'}}>
                   <Text style={style.headerTitleStyle}>{R.strings.AppName}</Text> 
-                  <CustomTextInput sourceImage={R.images.username_icon} placeholderValue='Username' keyboardType="email-address" autoCapitalize="none" onChangeText={(username)=>this.setState({username})}></CustomTextInput>
-                  <CustomTextInput sourceImage={R.images.password_icon} placeholderValue='Password' secureTextEntry = {true} autoCapitalize="none" onChangeText={(password)=>this.setState({password})}></CustomTextInput>
+                  <CustomTextInput sourceImage={R.images.username_icon}  placeholderValue='Username' keyboardType="email-address" autoCapitalize="none" onChangeText={(username)=>this.setState({username})}></CustomTextInput>
+                  <CustomTextInput sourceImage={R.images.password_icon}  placeholderValue='Password' secureTextEntry = {true} autoCapitalize="none" onChangeText={(password)=>this.setState({password})}></CustomTextInput>
                   <CustomButton title='LOGIN' 
-                     //onPress={()=> this.props.navigation.navigate('Home')}
-                       onPress={()=> this.loginUser()}
+                     onPress={()=> this.props.navigation.navigate('Home')}
+                     //   onPress={()=> this.loginUser()}
                    ></CustomButton>
                   <TouchableOpacity onPress={()=>{this.props.navigation.navigate('ForgotPassword')}}>
                       <Text style={style.forgotBtn}>Forgot Password?</Text>

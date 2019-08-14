@@ -2,21 +2,23 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button,FlatList,Image,AsyncStorage } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import R from '../R';
+//import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class MyOrderScreen extends Component {
     constructor(){
         super()
         this.state = {
             datasource: [],
-            access_token: ""
+            access_token: "",  
         }
     }
 
-     componentDidMount() {
+    
+    componentDidMount() {
          this.listOrder()
      }
 
-     async listOrder(){
+    async listOrder(){
         const token = await AsyncStorage.getItem("@storage_Key_token");
         fetch('http://staging.php-dev.in:8844/trainingapp/api/orderList',{
            method: 'GET',
@@ -30,10 +32,9 @@ export default class MyOrderScreen extends Component {
             console.log(responseJson)
             this.setState(
                 {
-                    datasource: responseJson.data
+                    datasource: responseJson.data.reverse()
                 }
-            )
-            
+            )   
         }).catch((err)=> {
             console.error(err)
         })
@@ -42,14 +43,17 @@ export default class MyOrderScreen extends Component {
     render(){
         return(
             <View style={styles.container}>
+
                 
                 <FlatList
                 data={this.state.datasource}
                 renderItem = {({item})=>(
                     
-                    <TouchableOpacity onPress={()=> this.props.navigation.navigate("OrderDetails", {
+                    <TouchableOpacity 
+                       onPress={()=> this.props.navigation.navigate("OrderDetails", {
                         OrderID: item.id
-                      })} style={{margin: 10,height: 80}}>
+                    })}
+                      style={{margin: 10,height: 80}}>
                     <View style={{margin: 10, flexDirection: "row"}}>
                         <View style={styles.OrderId}>
                             <Text style={styles.orderIDText}>Order ID: {item.id}</Text>
@@ -79,6 +83,9 @@ const styles = StyleSheet.create({
         //justifyContent: 'center',
         //alignItems: 'center'
     },
+    spinnerTextStyle: {
+        color: '#FFF'
+      },
     OrderId:{
         flex: 1,
         //flexDirection: 'row'

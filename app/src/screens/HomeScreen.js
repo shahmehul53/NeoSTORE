@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Button, Image, TextInput, Text,ScrollView,TouchableOpacity,FlatList} from 'react-native';
-import R from '../R'
+import R from '../R';
+import {BackgroundCarousel} from "../components/BackgroundCarousel";
 
 //import style from '../Styles'
 
@@ -15,6 +16,18 @@ const gridData = [
 
 
 export default class HomeScreen extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state={
+            sliderImgs:[
+                {key: R.images.slider_img1},
+                {key: R.images.slider_img2},
+                {key: R.images.slider_img3},
+                {key: R.images.slider_img4}
+            ]
+        }
+    }
 
     static navigationOptions = ({ navigation }) => ({
         title: 'Home Screen',
@@ -39,8 +52,9 @@ export default class HomeScreen extends Component {
     render(){
         return(
             <View style={{flex: 1, flexDirection: 'column'}}>
-                <View style={{flex: 2}}>
-                    <ScrollView 
+                <View style={{flex: 2.2}}>
+                    <BackgroundCarousel images={this.state.sliderImgs}/>
+                    {/* <ScrollView 
                     horizontal 
                     pagingEnabled
                     snapToAlignment={"center"}
@@ -49,7 +63,7 @@ export default class HomeScreen extends Component {
                         <Image style={{width: 393, height: "100%"}} source={R.images.slider_img2}/>
                         <Image style={{width: 393, height: "100%"}} source={R.images.slider_img3}/>
                         <Image style={{width: 393, height: "100%"}} source={R.images.slider_img4}/>
-                    </ScrollView>
+                    </ScrollView> */}
                 </View>
 
                 <View style={{flex: 3,justifyContent: 'center', alignItems: 'center'}}>

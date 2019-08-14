@@ -4,6 +4,7 @@ import R from '../R'
 import { Font } from 'expo';
 import StarsFilled from '../components/StarsFilled'
 import StarsUnfilled from '../components/StarsUnfilled'
+import UserRatings from '../components/UserRatings'
 
 
 
@@ -58,11 +59,16 @@ export default class Chairs extends Component {
                                     <Text>{item.producer}</Text>
                                     {/* <View style={{flex: 1, flexDirection: "row", margin: 10}}> */}
                                         {/* <View style={{margin: 10,flexDirection: 'row'}}> */}
-                                           <View style={{flexDirection: 'row'}}>
+                                        <View style={{flexDirection: 'row'}}>
+                                        <View style={{flex: 3}}>
                                            <Text style={{color:"#FE4040",fontSize: 20, fontWeight: 'bold'}}>Rs.{item.cost}</Text>
+                                           </View>
                                            
-                                           <Text style={{paddingLeft: 140}}>{item.rating}</Text>
-                                        </View>
+                                           {/* <Text style={{paddingLeft: 140}}>{item.rating}</Text> */}
+                                           <View style={{flex: 1,marginLeft: 30, marginRight: 10}}> 
+                                           <UserRatings ratings={item.rating}/>
+                                           </View>
+                                    </View>
                                            {/* <View style={{flexDirection: 'row', marginLeft: 150}}></View> */}
                                         {/* </View> */}
                                     {/* </View> */}

@@ -3,19 +3,25 @@ import {View, StyleSheet, Image, TextInput} from 'react-native';;
 import style from '../Styles'
 import R from '../R'
 
-const CustomTextInput=({sourceImage,placeholderValue, onChangeText,secureTextEntry,keyboardType,autoCapitalize})=>{
+const CustomTextInput=({sourceImage,placeholderValue,onChangeText,secureTextEntry,keyboardType,autoCapitalize})=>{
     return(
     <View style={style.textInputStyle}>
         <View style={{flex:1}}>
           <Image source={sourceImage}/>
           </View>
         <View style={{flex:5}}>
-         <TextInput placeholderTextColor={R.color.textInputBorderColor} keyboardType={keyboardType} secureTextEntry={secureTextEntry} placeholder={placeholderValue} autoCapitalize={autoCapitalize}onChangeText={onChangeText}>
+         <TextInput style={styles.textInput} placeholderTextColor={R.color.textInputBorderColor}  keyboardType={keyboardType} secureTextEntry={secureTextEntry} placeholder={placeholderValue} autoCapitalize={autoCapitalize}onChangeText={onChangeText}>
 
          </TextInput> 
         </View>  
     </View>
     )
 }
+
+const styles = StyleSheet.create({
+  textInput: {
+   color: 'white',
+  },
+ });
 
 export default CustomTextInput

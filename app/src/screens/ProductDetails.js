@@ -3,6 +3,8 @@ import {View,KeyboardAvoidingView, Button, Image, TextInput, Text,ScrollView,Tou
 import R from '../R';
 import style from '../Styles'
 import { TouchableHighlight } from 'react-native-gesture-handler';
+import UserRatings from '../components/UserRatings';
+import InputSpinner from "react-native-input-spinner";
 
 
 export default class ProductDetails extends Component{
@@ -22,7 +24,8 @@ export default class ProductDetails extends Component{
             defaultRating: 1,
             maxRating: 5,
             status: "",
-            user_msg: ""
+            user_msg: "",
+            isLoading: false
         };
     }
 
@@ -49,6 +52,7 @@ export default class ProductDetails extends Component{
           });
     }
 
+
      setRatings(){
         //const token = await AsyncStorage.getItem("@storage_Key_token")
         const { navigation } = this.props;
@@ -66,7 +70,6 @@ export default class ProductDetails extends Component{
         }).then((response)=>response.json())
         .then((responseJson)=>{
             console.log(responseJson)
-            
         })
         .catch(error => {
             console.error(error);
@@ -141,7 +144,7 @@ export default class ProductDetails extends Component{
         return this.state.productImages.map(item=> {
             return(
                 <TouchableOpacity onPress={()=>this.setState({largeImage: item.image})} key={item.image}>
-                    <Image style={{width: 78, height: 69, marginTop: 20,margin: 5,borderColor: 'black',borderWidth: 1}} source= {{uri: item.image}}/>
+                    <Image style={{width: 80, height: 70, marginTop: 20,margin: 5,borderColor: 'black',borderWidth: 1}} source= {{uri: item.image}}/>
                 </TouchableOpacity>
             );
         }); 
@@ -174,17 +177,20 @@ export default class ProductDetails extends Component{
         } 
         
         return(
+            // <KeyboardAvoidingView  behavior="padding" enabled>
             <View style={{flex: 1}}>
                 <ScrollView nestedScrollEnabled>
                 <Text style={{fontSize: 25, paddingLeft: 20, marginTop: 10, fontWeight: 'bold',color: '#262626'}}>{this.state.datasource.name}</Text>
                 <Text style={{fontSize: 20, color: '#4f4f4f',fontWeight: 'bold',paddingLeft: 20}}>{this.categoryChange()}</Text>
                 <View style={{flexDirection: 'row'}}>
-                    
+                    <View style={{flex:3}}>
                       <Text style={{fontSize: 14, color: '#4f4f4f',fontWeight: 'bold',paddingLeft: 20}}>{this.state.datasource.producer}</Text>
-                    
+                      </View>
                    
-                      <Text style={{paddingLeft: 280}}>{this.state.datasource.rating}</Text>
-                    
+                      {/* <Text style={{paddingLeft: 280}}>{this.state.datasource.rating}</Text> */}
+                      <View style={{flex: 1,marginLeft: 30, marginRight: 10}}>
+                      <UserRatings ratings={this.state.datasource.rating}/>
+                      </View>
                     </View>
 
                    
@@ -208,23 +214,29 @@ export default class ProductDetails extends Component{
 
                         <View style={{marginTop: 20, marginRight: 20}}>
                           <Text style={{color: "#111111",fontWeight: 'bold',fontSize: 18, marginLeft: 20}}>DESCRIPTION:</Text>
-                          {/* <ScrollView nestedScrollEnabled>  */}
+                          <ScrollView nestedScrollEnabled> 
                           <Text style={{marginTop: 5, paddingLeft: 10,fontWeight: 'bold', color: '#333333',fontSize: 14, marginLeft: 10}}>{this.state.datasource.description}</Text>
-                          {/* </ScrollView> */}
+                          </ScrollView>
                         </View>
                         </ScrollView>
 
                         {/* <KeyboardAvoidingView  behavior="padding" enabled> */}
+                        <View style={{opacity: 0.5, backgroundColor: '#000'}}>
+                                <TouchableOpacity onPress={()=>this.setQuantityModalVisible(!this.state.quantityModalVisible)}/>        
+                        </View>
 
-                        <View style={{flexDirection: 'row',marginTop: 26,marginRight: 14,marginBottom:26,marginLeft: 14}}>
-                        <KeyboardAvoidingView  behavior="padding" enabled>
+                        <View style={{flex:2,flexDirection: 'row',marginTop: 26,marginRight: 14,marginBottom:26,marginLeft: 14}}>
+                        {/* <KeyboardAvoidingView  behavior="padding" enabled> */}
+                        {/* <View style={{opacity: 0.5, backgroundColor: '#000'}}>
+                                <TouchableOpacity onPress={()=>this.setQuantityModalVisible(!this.state.quantityModalVisible)} style={{flex:1}}/>        
+                        </View> */}
                             <Modal 
                             animationType="fade"
                             transparent={true}
                             visible={this.state.quantityModalVisible}>
-                                <View style={{opacity: 0.5, backgroundColor: '#000'}}>
+                                {/* <View style={{opacity: 0.5, backgroundColor: '#000'}}>
                                     <TouchableOpacity onPress={()=>this.setQuantityModalVisible(!this.state.quantityModalVisible)} style={{flex:1}}/>
-                                </View>
+                                </View> */}
                             
                             <View style={{flex: 1,backgroundColor: '#a9a9a9'}}>
                             {/* <KeyboardAvoidingView  behavior="padding" enabled> */}
@@ -233,9 +245,19 @@ export default class ProductDetails extends Component{
                                 <View style={{padding: 40}}>{ this.renderLargeImage()}</View>
                                 <Text style={{fontSize: 18, fontWeight: 'bold', paddingHorizontal: 100}}>Enter Quantity</Text>
                                 <View style={{justifyContent: 'center', alignItems: 'center', paddingVertical: 10}}>
-                                <TextInput style={{fontSize: 20,paddingBottom: 10,paddingTop: 10,borderWidth: 3,borderRadius: 10,borderColor:'#000000', width: 120,height: 50, textAlign: 'center'}} 
+                                {/* <TextInput style={{fontSize: 20,paddingBottom: 10,paddingTop: 10,borderWidth: 3,borderRadius: 10,borderColor:'#000000', width: 120,height: 50, textAlign: 'center'}} 
                                     onChangeText={quantity=>
-                                    this.setState({quantity: quantity})} />
+                                    this.setState({quantity: quantity})} /> */}
+                                <InputSpinner
+	                              max={8}
+	                              min={1}
+	                              step={1}
+	                              colorMax={"#E91C1A"}
+	                              colorMin={"#E91C1A"}
+	                              value={this.state.quantity}
+	                              onChange={quantity=>
+                                  this.setState({quantity: quantity})}
+                               />
                                 </View>
                                 {/* <View > */}
                                 <TouchableOpacity 
@@ -250,7 +272,8 @@ export default class ProductDetails extends Component{
                             </View>
                                 
                             </Modal>
-                            </KeyboardAvoidingView>
+                            {/* </KeyboardAvoidingView> */}
+                            <View style={{flex: 1,marginLeft: 20}}>
                             <TouchableOpacity style={{width: 160, height: 45,backgroundColor: '#E91C1A', borderRadius: 10}}
                             onPress={()=>{
                                 this.setQuantityModalVisible(true);
@@ -258,6 +281,7 @@ export default class ProductDetails extends Component{
                             
                                 <Text style={{fontSize: 18, fontWeight: '500', color: '#FFFFFF', textAlign: 'center', paddingVertical: 10}}>BUY NOW</Text>
                             </TouchableOpacity>
+                            </View>
                             
                             <Modal 
                             animationType="fade"
@@ -287,18 +311,19 @@ export default class ProductDetails extends Component{
 
                                 
                             </Modal>
-                            
 
-
-                            <TouchableOpacity style={{marginLeft: 10, width: 160, height: 45, backgroundColor: '#9C908F',borderRadius: 10,alignContent: 'center', marginRight: 10,marginLeft: 20}}
+                            <View style={{flex: 1,marginRight: 30}}>
+                            <TouchableOpacity style={{ width: 160, height: 45, backgroundColor: '#9C908F',borderRadius: 10,alignContent: 'center', marginRight: 10,marginLeft: 20}}
                             onPress={()=>{
                                 this.setRatingModalVisible(true);
                            }}>
                                 <Text style={{fontSize: 18, fontWeight: '500',color: '#5C5858', textAlign: 'center', paddingVertical: 10}}>RATE</Text>
                             </TouchableOpacity>
+                            </View>
                         </View>
                         {/* </KeyboardAvoidingView> */}
-             </View>                
+             </View>   
+            //  </KeyboardAvoidingView>             
         )
     }
 }
@@ -310,7 +335,7 @@ const modalStyles = StyleSheet.create({
        alignItems: 'center',
        backgroundColor: 'white',
        marginTop: 150,
-       marginBottom: 150,
+       marginBottom: 130,
        marginLeft: 20,
        marginRight: 20,
        borderWidth: 2,

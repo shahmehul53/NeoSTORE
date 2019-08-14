@@ -44,7 +44,8 @@ const images={
     slider_img3: require("./images/slider_img3.jpg"),
     slider_img4: require("./images/slider_img4.jpg"),
     profile: require("./images/profile.jpeg"),
-    cartEmpty: require("./images/cartEmpty.png")
+    cartEmpty: require("./images/cartEmpty.png"),
+    storelocator: require("./images/storelocator.png")
 }
 
 export default images

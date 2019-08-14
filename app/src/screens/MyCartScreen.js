@@ -75,7 +75,7 @@ export default class MyCartScreen extends Component {
         .then((responseJson)=>{
             console.log(responseJson)
             if (responseJson.status == 200) {
-                console.log(responseJson.status);
+                console.log("status is" +responseJson.status);
                 this.listCart();
             }
         })
@@ -86,7 +86,7 @@ export default class MyCartScreen extends Component {
 
     deleteItem(id){
         const product_id = id;
-        console.log(product_id+''+id)
+        console.log("id is" +product_id+''+id)
         fetch('http://staging.php-dev.in:8844/trainingapp/api/deleteCart',{
            method: 'POST',
            headers:{
@@ -98,12 +98,14 @@ export default class MyCartScreen extends Component {
             `product_id=${product_id}`
         }).then((response)=>response.json())
         .then((responseJson)=>{
-            if (responseJson.status == 200) {
+            //if (responseJson.status == 200) {
                 console.log(responseJson.status);
+                //console.log("tok"+ token)
+                console.log("token is"+ this.state.access_token)
                 this.listCart();
-            }
+            //}
         
-        console.log(responseJson)
+        console.log("deleted item"+ responseJson)
         }).catch(error => {
             console.error(error);
           });
@@ -118,7 +120,7 @@ export default class MyCartScreen extends Component {
     onSwipeClose(pid){
         this.setState({
             pid: null
-    })
+        })
     }
 
     render(){
@@ -133,7 +135,6 @@ export default class MyCartScreen extends Component {
                 </TouchableOpacity>
                 </View>
               ),
-              underlayColor: 'rgba(0, 0, 0, 1, 0.6)'
             }
           ]
 
@@ -157,13 +158,13 @@ export default class MyCartScreen extends Component {
                                 source={{uri: item.product.product_images}}
                                 />
                             </View>
-                                <View style={{flex: 2, paddingLeft: 15}} >
+                                <View style={{flex: 3}} >
                                    <Text style={{fontSize: 20, fontWeight: 'bold', color: '#1C1C1C'}}>
                                     {item.product.name}
                                    </Text>
                                    <Text>({item.product.product_category})</Text>
                                    {/* <Text style={{paddingTop: 10}}>Qty: {item.quantity}</Text> */}
-                                   <View style={{paddingTop: 10}}>
+                                   <View style={{paddingTop: 10, flexDirection: 'row'}}>
                                    <NumericInput 
                                      
                                      //value={this.state.value} 
@@ -185,6 +186,7 @@ export default class MyCartScreen extends Component {
                                     leftButtonBackgroundColor='#E91C1A'
                                     //upDownButtonsBackgroundColor = '#E91C1A'
                                     />  
+                                    <Text style={{fontSize: 15,color: '#333333',marginLeft: 100,fontWeight: 'bold'}}>र {item.product.cost}</Text>
                                     </View>
                                     {/* <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end'}}>
                                         <Text style={{fontSize: 15,color: '#333333',alignItems: "flex-end",justifyContent: 'flex-end',paddingBottom: 10,fontWeight: 'bold'}}>र {item.product.cost}</Text>

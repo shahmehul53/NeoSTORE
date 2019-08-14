@@ -4,6 +4,7 @@ import R from '../R'
 import { Font } from 'expo';
 import StarsFilled from '../components/StarsFilled'
 import StarsUnfilled from '../components/StarsUnfilled'
+import UserRatings from '../components/UserRatings'
 
 
 
@@ -50,8 +51,6 @@ export default class Tables extends Component {
     //   }
 
     render(){
-        
-
         console.log(this.state.posts);
         return(
             <View style={{flexDirection: 'row', margin: 10}}>
@@ -59,10 +58,10 @@ export default class Tables extends Component {
                   data={this.state.posts}
                   renderItem={({ item })=> (
                     //  <View>
-                        <TouchableOpacity onPress={()=> this.props.navigation.navigate("Details", {
-                            productID: item.id,
-                            productName: item.name
-                        })}>
+                    <TouchableOpacity onPress={()=> this.props.navigation.navigate("Details", {
+                        productID: item.id,
+                        productName: item.name
+                    })}>
                             <View style={{flex: 1, flexDirection: "row", padding: 10}}>
                                 {/* <View style={{flex: 1}}> */}
                                     <Image source = {{uri: item.product_images}} style={{width: 70, height: 70}} />
@@ -72,9 +71,14 @@ export default class Tables extends Component {
                                     <Text>{item.producer}</Text>
                                     {/* <View style={{flex: 1, flexDirection: "row", margin: 10}}> */}
                                     <View style={{flexDirection: 'row'}}>
+                                        <View style={{flex: 3}}>
                                            <Text style={{color:"#FE4040",fontSize: 20, fontWeight: 'bold'}}>Rs.{item.cost}</Text>
+                                           </View>
                                            
-                                           <Text style={{paddingLeft: 140}}>{item.rating}</Text>
+                                           {/* <Text style={{paddingLeft: 140}}>{item.rating}</Text> */}
+                                           <View style={{flex: 1,marginLeft: 30, marginRight: 10}}> 
+                                           <UserRatings ratings={item.rating}/>
+                                           </View>
                                     </View>
                                     {/* </View> */}
                                 </View>
@@ -92,14 +96,3 @@ export default class Tables extends Component {
 
 }
 
-function renderRating(){
-    var elements=[]
-    for(i=0; i<count;i++){
-        elements.push(<StarsFilled/>)
-    }
-
-    for(j=0;j<5;j++){
-        elements.push(<StarsUnfilled/>)
-    }
-
-}

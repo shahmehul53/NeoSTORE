@@ -146,9 +146,8 @@ export default class RegisterScreen extends Component {
         console.log(this.state.datasource)
         return (
             <View style={style.container}>
-                <KeyboardAvoidingView  behavior="padding" enabled>
+                {/* <KeyboardAvoidingView  behavior="padding" enabled> */}<ScrollView>
                 <View style={style.RegisterView}>
-                
                 
                 <Text style={style.headerTitleStyle}>{R.strings.AppName}</Text>
                 <CustomTextInput sourceImage={R.images.username_icon} placeholderValue='First Name' autoCapitalize="none" onChangeText={(first_name)=>this.setState({first_name})}></CustomTextInput>
@@ -190,7 +189,8 @@ export default class RegisterScreen extends Component {
                  this.registerUser(this.state.first_name,this.state.last_name,this.state.email,this.state.password,this.state.confirm_password,this.state.gender,this.state.phone_no)} ></CustomButton> 
                  {this.loadingView()}
                 </View>
-                </KeyboardAvoidingView>
+                {/* </KeyboardAvoidingView> */}
+                </ScrollView>
                 
             </View>
 
