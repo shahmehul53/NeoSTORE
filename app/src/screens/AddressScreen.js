@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button,FlatList,Image, TextInput,Alert,AsyncStorage } from 'react-native';
-
 import R from '../R';
 import CustomButtom from '../components/CustomButton';
 import CustomRedButton from '../components/CustomRedButton';
-import CustomTextInput from '../components/CustomTextInput'
+import CustomTextInput from '../components/CustomTextInput';
+import Api from '../components/Api'
 
 export default class AddressScreen extends Component{
     constructor(){
@@ -16,20 +16,10 @@ export default class AddressScreen extends Component{
         }
     }
 
-    async  placeOrder(){
+    placeOrder(){
         const address = this.state.address;
         const { navigate } = this.props.navigation;
-        const token = await AsyncStorage.getItem("@storage_Key_token")
-        fetch('http://staging.php-dev.in:8844/trainingapp/api/order',{
-            method: 'POST',
-            headers:{
-             //'access_token': "5d2eb4b6ca059",
-             access_token: token,
-             'Content-Type': 'application/x-www-form-urlencoded',
-             },
-             body:
-             `address=${address}`
-         }).then((response)=>response.json())
+        return Api('order','POST',`address=${address}`)
          .then((responseJson)=>{
              this.setState({datasource: responseJson})
              if(this.state.datasource.status == 200){

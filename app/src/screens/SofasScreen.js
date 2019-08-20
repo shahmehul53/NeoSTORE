@@ -5,25 +5,19 @@ import { Font } from 'expo';
 import StarsFilled from '../components/StarsFilled'
 import StarsUnfilled from '../components/StarsUnfilled'
 import UserRatings from '../components/UserRatings'
+import Api from '../components/Api';
 
 
 
 export default class Sofas extends Component {
 
     state = {
-       // error: false,
         posts: []
     }
     
-    
-
-
     componentDidMount() {
-        //console.log('COMPONENT DID MOUNT')
         categoryId=2
-        // ${categoryId}
-        fetch("http://staging.php-dev.in:8844/trainingapp/api/products/getList?product_category_id=3")
-        .then((response)=> response.json())
+        return Api('products/getList?product_category_id=3','GET',null)
         .then((responseJson)=>{
             console.log(responseJson)
             this.setState({
@@ -35,24 +29,7 @@ export default class Sofas extends Component {
         })
     }
 
-    // renderItems(){
-    //     return(
-    //       this.state.items.map((item)=>
-    //       <ScrollView>
-    //         <TouchableOpacity>
-    //         //onPress={()=>{
-    //           //this.props.navigation.navigate('Detail',{productId:item.id})
-    //           }}>  
-    //          <ItemDetail itemImage={item.product_images} itemName={item.name} itemProducer={item.producer} itemCost={item.cost} itemRating={item.rating} />
-    //          </TouchableOpacity>
-    //       </ScrollView>
-    //       )
-    //     )
-    //   }
-
     render(){
-        
-
         console.log(this.state.posts);
         return(
             <View style={{flexDirection: 'row', margin: 10}}>
@@ -98,17 +75,4 @@ export default class Sofas extends Component {
             </View>
         );
     }
-
-}
-
-function renderRating(){
-    var elements=[]
-    for(i=0; i<count;i++){
-        elements.push(<StarsFilled/>)
-    }
-
-    for(j=0;j<5;j++){
-        elements.push(<StarsUnfilled/>)
-    }
-
 }

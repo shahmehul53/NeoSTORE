@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button,FlatList,Image,AsyncStorage, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import R from '../R';
+import Api from '../components/Api';
 
 export default class OrderDetailsScreen extends Component {
     constructor(){
@@ -21,18 +22,19 @@ export default class OrderDetailsScreen extends Component {
        this.OrderDetails()
    }
    
-    async OrderDetails(){
+    OrderDetails(){
         const { navigation } = this.props;
         const order_id = navigation.getParam("OrderID","2031");
-        const token = await AsyncStorage.getItem("@storage_Key_token");
-        fetch(`http://staging.php-dev.in:8844/trainingapp/api/orderDetail?order_id=${order_id}`,{
-           method: 'GET',
-           headers:{
-            //'access_token': "5d2eb4b6ca059",
-            access_token: token,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        }).then((response)=>response.json())
+        // const token = await AsyncStorage.getItem("@storage_Key_token");
+        // fetch(`http://staging.php-dev.in:8844/trainingapp/api/orderDetail?order_id=${order_id}`,{
+        //    method: 'GET',
+        //    headers:{
+        //     //'access_token': "5d2eb4b6ca059",
+        //     access_token: token,
+        //     'Content-Type': 'application/x-www-form-urlencoded',
+        //     },
+        // }).then((response)=>response.json())
+        return Api(`orderDetail?order_id=${order_id}`,'GET',null)
         .then((responseJson)=>{
             console.log(responseJson)
             this.setState(

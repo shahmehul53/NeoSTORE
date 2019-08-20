@@ -6,6 +6,7 @@ import CustomButton from '../components/CustomButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../Styles'
 import CustomActivityIndicator from '../components/CustomActivityIndicator';
+import Api from '../components/Api';
 
 export default class EditProfleScreen extends Component {
     constructor(){
@@ -21,18 +22,9 @@ export default class EditProfleScreen extends Component {
             dob: ""
         }
     } 
-    async updateProfile(first_Name,last_Name,email,phone_no,dob){
-        const token = await AsyncStorage.getItem("@storage_Key_token");
-        console.log(token)
-        fetch('http://staging.php-dev.in:8844/trainingapp/api/users/update',{
-        method:'POST',
-        headers:{
-        access_token: token,
-        'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body:
-        `first_name=${first_Name}&last_name=${last_Name}&email=${email}&profile_pic=${"abc.jpg"}&phone_no=${phone_no}&dob=${dob}`
-        }).then((response)=>response.json())
+    
+    updateProfile(first_Name,last_Name,email,phone_no,dob){
+        return Api('users/update','POST',`first_name=${first_Name}&last_name=${last_Name}&email=${email}&profile_pic=${"abc.jpg"}&phone_no=${phone_no}&dob=${dob}`)
         .then((responseJson)=>{
         this.setState({datasource: responseJson}, function(){});
         console.log(responseJson)

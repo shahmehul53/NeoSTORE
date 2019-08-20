@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button,FlatList,Image,AsyncStorage } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import R from '../R';
+import Api from '../components/Api'
 //import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class MyOrderScreen extends Component {
@@ -18,16 +19,17 @@ export default class MyOrderScreen extends Component {
          this.listOrder()
      }
 
-    async listOrder(){
-        const token = await AsyncStorage.getItem("@storage_Key_token");
-        fetch('http://staging.php-dev.in:8844/trainingapp/api/orderList',{
-           method: 'GET',
-           headers:{
-            //'access_token': "5d2eb4b6ca059",
-            access_token: token,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        }).then((response)=>response.json())
+    listOrder(){
+        // const token = await AsyncStorage.getItem("@storage_Key_token");
+        // fetch('http://staging.php-dev.in:8844/trainingapp/api/orderList',{
+        //    method: 'GET',
+        //    headers:{
+        //     //'access_token': "5d2eb4b6ca059",
+        //     access_token: token,
+        //     'Content-Type': 'application/x-www-form-urlencoded',
+        //     },
+        // }).then((response)=>response.json())
+        return Api('orderList','GET',null)
         .then((responseJson)=>{
             console.log(responseJson)
             this.setState(

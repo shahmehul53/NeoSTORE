@@ -7,6 +7,7 @@ import CustomButton from '../components/CustomButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CustomActivityIndicator from '../components/CustomActivityIndicator';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import Api from '../components/Api';
 
 //  widthScreen: Dimensions.get('window').width;
 //  heightScreen: Dimensions.get('window').height
@@ -40,14 +41,7 @@ export default class RegisterScreen extends Component {
     }
 
     registerUser(first_Name,last_Name,email,password,confirm_password,gender,phone_no){
-        fetch('http://staging.php-dev.in:8844/trainingapp/api/users/register',{
-        method:'POST',
-        headers:{
-        'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body:
-        `first_name=${first_Name}&last_name=${last_Name}&email=${email}&password=${password}&confirm_password=${confirm_password}&gender=${gender}&phone_no=${phone_no}`
-        }).then((response)=>response.json())
+        return Api('users/register','POST',`first_name=${first_Name}&last_name=${last_Name}&email=${email}&password=${password}&confirm_password=${confirm_password}&gender=${gender}&phone_no=${phone_no}`)
         .then((responseJson)=>{
         this.setState({datasource: responseJson}, function(){});
         console.log(responseJson)

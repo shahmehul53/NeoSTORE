@@ -6,6 +6,7 @@ import CustomTextInput from '../components/CustomTextInput'
 import CustomButton from '../components/CustomButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CustomActivityIndicator from '../components/CustomActivityIndicator';
+import Api from '../components/Api';
 
 let winSize = Dimensions.get('window');
 console.log(winSize);
@@ -25,22 +26,13 @@ export default class LoginScreen extends Component {
    loginUser(){
        const username = this.state.username
        const password = this.state.password
-       fetch('http://staging.php-dev.in:8844/trainingapp/api/users/login',{
-           method: 'POST',
-           headers:{
-            //'access_token': "5d2eb4b6ca059",
-            'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body:
-            `email=${username}&password=${password}`
-        }).then((response)=>response.json())
+    return Api('users/login','POST',`email=${username}&password=${password}`)
         .then((responseJson)=>{
             console.log(responseJson)
             this.setState({
                 datasource: responseJson
             },
-                 function(){});
-                 //console.log(this.state.datasource)   
+                 function(){});   
                  console.log(responseJson)     
           this.loginSuccessfully()
         })
@@ -98,8 +90,8 @@ export default class LoginScreen extends Component {
                   <CustomTextInput sourceImage={R.images.username_icon}  placeholderValue='Username' keyboardType="email-address" autoCapitalize="none" onChangeText={(username)=>this.setState({username})}></CustomTextInput>
                   <CustomTextInput sourceImage={R.images.password_icon}  placeholderValue='Password' secureTextEntry = {true} autoCapitalize="none" onChangeText={(password)=>this.setState({password})}></CustomTextInput>
                   <CustomButton title='LOGIN' 
-                     onPress={()=> this.props.navigation.navigate('Home')}
-                     //   onPress={()=> this.loginUser()}
+                     //onPress={()=> this.props.navigation.navigate('Home')}
+                       onPress={()=> this.loginUser()}
                    ></CustomButton>
                   <TouchableOpacity onPress={()=>{this.props.navigation.navigate('ForgotPassword')}}>
                       <Text style={style.forgotBtn}>Forgot Password?</Text>

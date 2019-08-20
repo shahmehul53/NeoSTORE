@@ -4,8 +4,11 @@ import R from '../R';
 import style from '../Styles'
 //import { FlatList } from 'react-native-gesture-handler';
 
+const DEVICE_WIDTH = Dimensions.get("window").width
+const DEVICE_HEIGHT = Dimensions.get("window").height
 
-export default class CustomDrawer1 extends Component{
+
+export default class CustomDrawer extends Component{
     constructor(){
         super()
         this.state = 
@@ -20,7 +23,7 @@ export default class CustomDrawer1 extends Component{
                 {image: R.images.chair, title: 'Chairs', action: 'Chairs', id: 2},
                 {image: R.images.cupboard, title: 'Cupboards', action: 'Cupboards', id: 4},
                 {image:R.images.username_icon,title: 'My Account', action:'MyAccount'},
-                {image:R.images.storelocator,title: 'Store Locator', action:'StoreLoactor'},
+                {image:R.images.storelocator_icon,title: 'Store Locator', action:'StoreLoactor'},
                 {image:R.images.myorders_icon,title: 'My Orders', action:'MyOrder'},
                 {image:R.images.logout_icon,title: 'Logout', action:'Login'}
             ]
@@ -98,7 +101,9 @@ export default class CustomDrawer1 extends Component{
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1
+        flex: 1,
+        //height: DEVICE_HEIGHT,
+        //width: DEVICE_WIDTH
     },
     imgView:{
         flex: 1,
@@ -120,7 +125,7 @@ const styles = StyleSheet.create({
     },
     profile: {
         //flex: 1,
-        flexDirection: 'row',
+        //flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         paddingTop: 25,
@@ -128,7 +133,8 @@ const styles = StyleSheet.create({
         borderBottomColor: '#777777'
     },
     topLinks:{
-        height: 200,
+        //flex:2,
+        //height: DEVICE_HEIGHT/2,
         backgroundColor: 'black'
     },
     drawerView:{
@@ -147,7 +153,7 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     bottomLinks:{
-        flex: 1,
+        flex: 2,
         backgroundColor: 'black',
         paddingTop: 10,
         //paddingBottom: 450,

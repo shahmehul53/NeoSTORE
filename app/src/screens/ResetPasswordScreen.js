@@ -5,6 +5,7 @@ import CustomTextInput from '../components/CustomTextInput'
 import CustomButton from '../components/CustomButton';
 import style from '../Styles'
 import CustomActivityIndicator from '../components/CustomActivityIndicator';
+import Api from '../components/Api';
 
 export default class ResetPasswordScreen extends Component{
     constructor(){
@@ -19,18 +20,8 @@ export default class ResetPasswordScreen extends Component{
         }
     } 
 
-    async resetPassword(oldPassword,password,confirmPassword){
-        const token = await AsyncStorage.getItem("@storage_Key_token");
-        console.log(token)
-        fetch('http://staging.php-dev.in:8844/trainingapp/api/users/change',{
-        method:'POST',
-        headers:{
-        access_token: token,
-        'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body:
-        `old_password=${oldPassword}&password=${password}&confirm_password=${confirmPassword}`
-        }).then((response)=>response.json())
+     resetPassword(oldPassword,password,confirmPassword){
+        return Api('users/change','POST',`old_password=${oldPassword}&password=${password}&confirm_password=${confirmPassword}`)
         .then((responseJson)=>{
         this.setState({datasource: responseJson}, function(){});
         console.log(responseJson)

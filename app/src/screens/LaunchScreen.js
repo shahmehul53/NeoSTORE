@@ -38,7 +38,7 @@ export default class LaunchScreen extends Component {
         return(
             <View style={styles.container}>
                 <Text style={styles.title}>Welcome to </Text>
-                <Text style={{fontSize: 45,fontWeight: 'bold',color: 'white'}}>NeoSTORE</Text>
+                <Text style={{fontSize: 50,fontWeight: 'bold',color: 'white'}}>NeoSTORE</Text>
                 <View style={{height:80,width:80,borderRadius:10,alignItems:'center', justifyContent:'center'}}>   
                     <SkypeIndicator color='white'/>
                 </View>

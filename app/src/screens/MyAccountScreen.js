@@ -5,6 +5,7 @@ import CustomTextInput from '../components/CustomTextInput'
 import CustomButton from '../components/CustomButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../Styles'
+import Api from '../components/Api';
 
 
 
@@ -22,18 +23,8 @@ export default class MyAccountScreen extends Component {
         this.myAccountDetails()
     }
 
-    async myAccountDetails(){
-        const token = await AsyncStorage.getItem("@storage_Key_token");
-        this.setState({ access_token: token });
-        console.log(token);
-        fetch('http://staging.php-dev.in:8844/trainingapp/api/users/getUserData',{
-           method: 'GET',
-           headers:{
-            //'access_token': "5d2eb4b6ca059",
-            access_token: token,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        }).then((response)=>response.json())
+    myAccountDetails(){
+        return Api('users/getUserData','GET',null)
         .then((responseJson)=>{
             console.log(responseJson)
             this.setState(

@@ -5,26 +5,23 @@ import { Font } from 'expo';
 import StarsFilled from '../components/StarsFilled'
 import StarsUnfilled from '../components/StarsUnfilled'
 import UserRatings from '../components/UserRatings'
+import Api from '../components/Api';
 
 
 
 export default class Chairs extends Component {
 
     state = {
-       // error: false,
         posts: []
     }
     
-    
-
-
     componentDidMount() {
         this.chairsData()
     }
+    
     chairsData(){
         categoryId=2
-        fetch("http://staging.php-dev.in:8844/trainingapp/api/products/getList?product_category_id=2")
-        .then((response)=> response.json())
+        return Api('products/getList?product_category_id=2','GET',null)
         .then((responseJson)=>{
             console.log(responseJson)
             this.setState({
@@ -36,9 +33,7 @@ export default class Chairs extends Component {
         })
     }
 
-    render(){
-        
-
+    render(){    
         console.log(this.state.posts);
         return(
             <View style={{flexDirection: 'row', margin: 10}}>
@@ -84,17 +79,4 @@ export default class Chairs extends Component {
             </View>
         );
     }
-
-}
-
-function renderRating(){
-    var elements=[]
-    for(i=0; i<count;i++){
-        elements.push(<StarsFilled/>)
-    }
-
-    for(j=0;j<5;j++){
-        elements.push(<StarsUnfilled/>)
-    }
-
 }

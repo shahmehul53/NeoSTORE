@@ -6,6 +6,7 @@ import CustomButtom from '../components/CustomButton';
 import CustomRedButton from '../components/CustomRedButton';
 import Swipeout from 'react-native-swipeout';
 import NumericInput from 'react-native-numeric-input'
+import Api from '../components/Api'
 
 width: Dimensions.get('window').width;
 height: Dimensions.get('window').height
@@ -28,50 +29,30 @@ export default class MyCartScreen extends Component {
         this.listCart()
     }
 
-    async listCart(){
-        const token = await AsyncStorage.getItem("@storage_Key_token");
-        this.setState({ access_token: token });
-        console.log(token);
-        fetch('http://staging.php-dev.in:8844/trainingapp/api/cart',{
-           method: 'GET',
-           headers:{
-            //'access_token': "5d2eb4b6ca059",
-            access_token: token,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        }).then((response)=>response.json())
+    listCart(){
+        return Api('cart','GET',null)
         .then((responseJson)=>{
-            console.log(responseJson)
-            this.setState(
-                {
-                    datasource: responseJson.data,
-                    total: responseJson.total, 
-                    //quantity: responseJson.data.quantity
-                    cartCount: responseJson.count                   
-                },
-            )       
+        console.log(responseJson)
+        this.setState(
+        {
+            datasource: responseJson.data,
+            total: responseJson.total, 
+            //quantity: responseJson.data.quantity
+            cartCount: responseJson.count                   
+        },
+        )       
         }).catch((err)=> {
             console.error(err)
         })
     }
-        
 
 
 
     editCart(value,id){
         const qty = value;
         const pid = id;
-        // console.log(product_id+''+quantity)
         console.log(pid + ' ' + qty);
-        fetch(`http://staging.php-dev.in:8844/trainingapp/api/editCart`,{
-           method: 'POST',
-           headers:{
-            //'access_token': "5d2eb4b6ca059",
-            access_token: this.state.access_token,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `product_id=${pid}&quantity=${qty}`
-        }).then((response)=>response.json())
+        return Api('editCart','POST',`product_id=${pid}&quantity=${qty}`)
         .then((responseJson)=>{
             console.log(responseJson)
             if (responseJson.status == 200) {
@@ -87,24 +68,12 @@ export default class MyCartScreen extends Component {
     deleteItem(id){
         const product_id = id;
         console.log("id is" +product_id+''+id)
-        fetch('http://staging.php-dev.in:8844/trainingapp/api/deleteCart',{
-           method: 'POST',
-           headers:{
-            //'access_token': "5d2eb4b6ca059",
-            access_token: this.state.access_token,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body:
-            `product_id=${product_id}`
-        }).then((response)=>response.json())
+        return Api('deleteCart','POST',`product_id=${product_id}`)
         .then((responseJson)=>{
-            //if (responseJson.status == 200) {
+            if (responseJson.status == 200) {
                 console.log(responseJson.status);
-                //console.log("tok"+ token)
-                console.log("token is"+ this.state.access_token)
                 this.listCart();
-            //}
-        
+            }
         console.log("deleted item"+ responseJson)
         }).catch(error => {
             console.error(error);
@@ -169,7 +138,6 @@ export default class MyCartScreen extends Component {
                                      
                                      //value={this.state.value} 
                                      onChange={value => this.editCart(value,item.product.id)}
-                                     //onLimitReached={(isMax,msg) => console.log(isMax,msg)}
                                      totalWidth={100} 
                                      totalHeight={25} 
                                      iconSize={25}

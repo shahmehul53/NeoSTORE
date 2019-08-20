@@ -5,6 +5,7 @@ import style from '../Styles'
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import UserRatings from '../components/UserRatings';
 import InputSpinner from "react-native-input-spinner";
+import Api from '../components/Api';
 
 
 export default class ProductDetails extends Component{
@@ -13,7 +14,6 @@ export default class ProductDetails extends Component{
         this.state = {
             datasource: [],
             productImages: [],
-           // product_category_id: 1,
             category: "Tables",
             largeImage: "",
             quantityModalVisible: false,
@@ -29,22 +29,12 @@ export default class ProductDetails extends Component{
         };
     }
 
-    async addToCart(){
-        const token = await AsyncStorage.getItem("@storage_Key_token")
+    addToCart(){
         const { navigation } = this.props;
         const quantity = this.state.quantity;
         console.log(this.state.quantity);
         const product_id = navigation.getParam("productID", "1");
-        fetch('http://staging.php-dev.in:8844/trainingapp/api/addToCart',{
-           method: 'POST',
-           headers:{
-            //'access_token': "5d2eb4b6ca059",
-            access_token: token,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body:
-            `product_id=${product_id}&quantity=${quantity}`
-        }).then((response)=>response.json())
+        return Api('addToCart','POST', `product_id=${product_id}&quantity=${quantity}`)
         .then((responseJson)=>{
         console.log(responseJson)
         }).catch(error => {
@@ -54,20 +44,10 @@ export default class ProductDetails extends Component{
 
 
      setRatings(){
-        //const token = await AsyncStorage.getItem("@storage_Key_token")
         const { navigation } = this.props;
         const product_id = navigation.getParam("productID", "1");
         const userRating = this.state.user_Ratings;
-        fetch('http://staging.php-dev.in:8844/trainingapp/api/products/setRating',{
-           method: 'POST',
-           headers:{
-            //'access_token': "5d2eb4b6ca059",
-            //access_token: this.state.access_token,
-            //access_token: token,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `product_id=${product_id}&rating=${userRating}`
-        }).then((response)=>response.json())
+        return Api('products/setRating','POST',`product_id=${product_id}&rating=${userRating}`)
         .then((responseJson)=>{
             console.log(responseJson)
         })
@@ -114,8 +94,7 @@ export default class ProductDetails extends Component{
     productDetail(){
         const { navigation } = this.props;
         const product_id = navigation.getParam("productID", "1")
-        fetch(`http://staging.php-dev.in:8844/trainingapp/api/products/getDetail?product_id=${product_id}`)
-        .then((response)=> response.json())
+        return Api(`products/getDetail?product_id=${product_id}`,'GET',null)
         .then((responseJson)=>{
             this.setState({
                 datasource: responseJson.data,
@@ -128,7 +107,6 @@ export default class ProductDetails extends Component{
         })
     }
    
-
     categoryChange(){
         
         if(this.state.datasource.product_category_id == 1) {
@@ -177,7 +155,7 @@ export default class ProductDetails extends Component{
         } 
         
         return(
-            // <KeyboardAvoidingView  behavior="padding" enabled>
+            
             <View style={{flex: 1}}>
                 <ScrollView nestedScrollEnabled>
                 <Text style={{fontSize: 25, paddingLeft: 20, marginTop: 10, fontWeight: 'bold',color: '#262626'}}>{this.state.datasource.name}</Text>
@@ -220,13 +198,13 @@ export default class ProductDetails extends Component{
                         </View>
                         </ScrollView>
 
-                        {/* <KeyboardAvoidingView  behavior="padding" enabled> */}
+                       
                         <View style={{opacity: 0.5, backgroundColor: '#000'}}>
                                 <TouchableOpacity onPress={()=>this.setQuantityModalVisible(!this.state.quantityModalVisible)}/>        
                         </View>
 
                         <View style={{flex:2,flexDirection: 'row',marginTop: 26,marginRight: 14,marginBottom:26,marginLeft: 14}}>
-                        {/* <KeyboardAvoidingView  behavior="padding" enabled> */}
+                        
                         {/* <View style={{opacity: 0.5, backgroundColor: '#000'}}>
                                 <TouchableOpacity onPress={()=>this.setQuantityModalVisible(!this.state.quantityModalVisible)} style={{flex:1}}/>        
                         </View> */}
@@ -239,25 +217,16 @@ export default class ProductDetails extends Component{
                                 </View> */}
                             
                             <View style={{flex: 1,backgroundColor: '#a9a9a9'}}>
-                            {/* <KeyboardAvoidingView  behavior="padding" enabled> */}
+                            
                                 <View style={modalStyles.modal}>
                                 <Text style={{fontSize: 20,fontWeight:'bold',color: '#2C2B2B', paddingTop: 20 }}>{this.state.datasource.name}</Text>
                                 <View style={{padding: 40}}>{ this.renderLargeImage()}</View>
                                 <Text style={{fontSize: 18, fontWeight: 'bold', paddingHorizontal: 100}}>Enter Quantity</Text>
                                 <View style={{justifyContent: 'center', alignItems: 'center', paddingVertical: 10}}>
-                                {/* <TextInput style={{fontSize: 20,paddingBottom: 10,paddingTop: 10,borderWidth: 3,borderRadius: 10,borderColor:'#000000', width: 120,height: 50, textAlign: 'center'}} 
+                                <TextInput style={{fontSize: 20,paddingBottom: 10,paddingTop: 10,borderWidth: 3,borderRadius: 10,borderColor:'#000000', width: 120,height: 50, textAlign: 'center'}} 
                                     onChangeText={quantity=>
-                                    this.setState({quantity: quantity})} /> */}
-                                <InputSpinner
-	                              max={8}
-	                              min={1}
-	                              step={1}
-	                              colorMax={"#E91C1A"}
-	                              colorMin={"#E91C1A"}
-	                              value={this.state.quantity}
-	                              onChange={quantity=>
-                                  this.setState({quantity: quantity})}
-                               />
+                                    this.setState({quantity: quantity})} />
+                                
                                 </View>
                                 {/* <View > */}
                                 <TouchableOpacity 
@@ -268,11 +237,11 @@ export default class ProductDetails extends Component{
                                 {/* </View> */}
                                 
                                 </View>
-                                {/* </KeyboardAvoidingView> */}
+                                
                             </View>
                                 
                             </Modal>
-                            {/* </KeyboardAvoidingView> */}
+                            
                             <View style={{flex: 1,marginLeft: 20}}>
                             <TouchableOpacity style={{width: 160, height: 45,backgroundColor: '#E91C1A', borderRadius: 10}}
                             onPress={()=>{
@@ -321,9 +290,8 @@ export default class ProductDetails extends Component{
                             </TouchableOpacity>
                             </View>
                         </View>
-                        {/* </KeyboardAvoidingView> */}
              </View>   
-            //  </KeyboardAvoidingView>             
+                        
         )
     }
 }

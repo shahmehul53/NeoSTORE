@@ -6,6 +6,7 @@ import CustomTextInput from '../components/CustomTextInput'
 import CustomButton from '../components/CustomButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Font from 'expo-font';
+import Api from '../components/Api';
 
 export default class ForgotPasswordScreen extends Component{
     constructor(){
@@ -20,27 +21,16 @@ export default class ForgotPasswordScreen extends Component{
     
 
     async  forgotPassword(){
-        const token = await AsyncStorage.getItem("@storage_Key_token");
         const email = this.state.email;
         const { navigate } = this.props.navigation;
-        fetch('http://staging.php-dev.in:8844/trainingapp/api/users/forgot',{
-            method: 'POST',
-            headers:{
-             //'access_token': "5d2eb4b6ca059",
-             access_token: token,
-             'Content-Type': 'application/x-www-form-urlencoded',
-             },
-             body:
-             `email=${email}`
-         }).then((response)=>response.json())
+        return Api('users/forgot','POST',`email=${email}`)
          .then((responseJson)=>{
              this.setState({datasource: responseJson})
              if(this.state.datasource.status == 200){
                 alert(this.state.datasource.user_msg)
                  setTimeout(function(){
                      navigate("Login");
-                 }, 3000);
-                 
+                 }, 3000);    
              } 
              else if(this.state.datasource.status == 400){
                 alert(this.state.datasource.user_msg)

@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, Dimensions, TouchableOpacity, Image,AsyncStorage
 import R from '../R';
 import style from '../Styles'
 import { withOrientation } from 'react-navigation';
+import Api from '../components/Api';
 
 // const WIDTH = Dimensions.get('window').width;
 // const HEIGHT = Dimensions.get('window').height;
@@ -30,18 +31,8 @@ export default class MenuDrawer extends Component{
          this.fetchData()
      }   
 
-    async fetchData(){
-        const token = await AsyncStorage.getItem("@storage_Key_token");
-        this.setState({ access_token: token });
-        console.log(token);
-        fetch('http://staging.php-dev.in:8844/trainingapp/api/users/getUserData',{
-           method: 'GET',
-           headers:{
-            //'access_token': "5d2eb4b6ca059",
-            access_token: token,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        }).then((response)=>response.json())
+    fetchData(){
+        return Api('users/getUserData','GET',null)
         .then((responseJson)=>{
             console.log(responseJson)
             this.setState(
@@ -74,7 +65,7 @@ export default class MenuDrawer extends Component{
                 <View style={styles.SectionStyle}>
                     <Image style={styles.imgIcon} source={R.images.shopping_cart}/>
                     {this.navLink('MyCart', 'My Cart')}
-                    <Text style={{fontSize: 25,color: "white",paddingLeft: 40}} >{this.state.cartCount}</Text> 
+                    <Text style={{fontSize: 25,color: "white",paddingLeft: 100}} >{this.state.cartCount}</Text> 
                     
                 </View>
                 <View style= {styles.SectionStyle}>

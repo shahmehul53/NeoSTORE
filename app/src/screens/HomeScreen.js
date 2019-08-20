@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
-import {View, Button, Image, TextInput, Text,ScrollView,TouchableOpacity,FlatList} from 'react-native';
+import {View, Button, Image, TextInput, Text,ScrollView,TouchableOpacity,FlatList,Dimensions} from 'react-native';
 import R from '../R';
 import {BackgroundCarousel} from "../components/BackgroundCarousel";
 
-//import style from '../Styles'
+
+
+const DEVICE_WIDTH = Dimensions.get("window").width
+const DEVICE_HEIGHT = Dimensions.get("window").height
 
 
 const gridData = [ 
@@ -54,16 +57,6 @@ export default class HomeScreen extends Component {
             <View style={{flex: 1, flexDirection: 'column'}}>
                 <View style={{flex: 2.2}}>
                     <BackgroundCarousel images={this.state.sliderImgs}/>
-                    {/* <ScrollView 
-                    horizontal 
-                    pagingEnabled
-                    snapToAlignment={"center"}
-                    showsHorizontalScrollIndicator={true}>
-                        <Image style={{width: 393, height: "100%"}} source={R.images.slider_img1}/>
-                        <Image style={{width: 393, height: "100%"}} source={R.images.slider_img2}/>
-                        <Image style={{width: 393, height: "100%"}} source={R.images.slider_img3}/>
-                        <Image style={{width: 393, height: "100%"}} source={R.images.slider_img4}/>
-                    </ScrollView> */}
                 </View>
 
                 <View style={{flex: 3,justifyContent: 'center', alignItems: 'center'}}>
@@ -71,13 +64,10 @@ export default class HomeScreen extends Component {
                       data={gridData}
                       renderItem={({ item }) =>
                         <View>
-                         <TouchableOpacity
-                          
+                         <TouchableOpacity  
                             style={{padding: 8}}
                             onPress={() => this.props.navigation.navigate(item.text)}>
-
-                            <Image source= {item.id}/>
-                            
+                            <Image source= {item.id}/>   
                         </TouchableOpacity>
                         </View>
                     }  
