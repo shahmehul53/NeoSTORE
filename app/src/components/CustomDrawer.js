@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     SectionStyle:{
         flexDirection: 'row',
         alignItems: 'center',
-        borderRadius: 0,
+        borderRadius: 1,
         paddingLeft: 16,
     },
 })

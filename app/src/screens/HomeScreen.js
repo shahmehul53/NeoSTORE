@@ -9,12 +9,7 @@ const DEVICE_WIDTH = Dimensions.get("window").width
 const DEVICE_HEIGHT = Dimensions.get("window").height
 
 
-const gridData = [ 
-    { id: R.images.tableicon, text: 'Tables'},
-    { id: R.images.sofaicon, text: 'Sofas'},
-    { id: R.images.chairsicon, text: 'Chairs'},
-    { id: R.images.cupboardicon, text: 'Cupboards'}
-]
+
 
 
 
@@ -28,6 +23,12 @@ export default class HomeScreen extends Component {
                 {key: R.images.slider_img2},
                 {key: R.images.slider_img3},
                 {key: R.images.slider_img4}
+            ],
+            gridData : [ 
+                { id: R.images.tableicon, text: 'Tables',value: 1},
+                { id: R.images.sofaicon, text: 'Sofas',value: 3},
+                { id: R.images.chairsicon, text: 'Chairs',value: 2},
+                { id: R.images.cupboardicon, text: 'Cupboards',value: 4}
             ]
         }
     }
@@ -61,13 +62,17 @@ export default class HomeScreen extends Component {
 
                 <View style={{flex: 3,justifyContent: 'center', alignItems: 'center'}}>
                     <FlatList
-                      data={gridData}
+                      data={this.state.gridData}
                       renderItem={({ item }) =>
                         <View>
                          <TouchableOpacity  
                             style={{padding: 8}}
-                            onPress={() => this.props.navigation.navigate(item.text)}>
-                            <Image source= {item.id}/>   
+                            key={item.key}
+                            //onPress={() => this.props.navigation.navigate(item.text)}
+                            onPress={() => this.props.navigation.navigate('List',{id: item.value,navTitle: item.text})}
+
+                            >
+                            <Image style={{borderRadius: 10}} source= {item.id}/>   
                         </TouchableOpacity>
                         </View>
                     }  

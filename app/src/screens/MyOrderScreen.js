@@ -20,15 +20,6 @@ export default class MyOrderScreen extends Component {
      }
 
     listOrder(){
-        // const token = await AsyncStorage.getItem("@storage_Key_token");
-        // fetch('http://staging.php-dev.in:8844/trainingapp/api/orderList',{
-        //    method: 'GET',
-        //    headers:{
-        //     //'access_token': "5d2eb4b6ca059",
-        //     access_token: token,
-        //     'Content-Type': 'application/x-www-form-urlencoded',
-        //     },
-        // }).then((response)=>response.json())
         return Api('orderList','GET',null)
         .then((responseJson)=>{
             console.log(responseJson)
@@ -46,10 +37,11 @@ export default class MyOrderScreen extends Component {
         return(
             <View style={styles.container}>
 
-                
+             
                 <FlatList
                 data={this.state.datasource}
                 renderItem = {({item})=>(
+                // <View style={{borderRadius: 15,backgroundColor: "#708090"}}>
                     
                     <TouchableOpacity 
                        onPress={()=> this.props.navigation.navigate("OrderDetails", {
@@ -69,11 +61,20 @@ export default class MyOrderScreen extends Component {
                         <View style={styles.costView}> 
                             <Text style={styles.costText}>Rs.{item.cost}</Text>  
                         </View> 
+                        {/* <View style={{borderWidth:1,width:150,borderColor: '#EDEDED'}}/> */}
                     </View>
                     </TouchableOpacity>
+                     
+                    // </View>
+                    
+
                 )}
                 keyExtractor={(item, index) => index.toString()}
+                
                 />
+                
+                
+                
             </View>
         )
     }

@@ -7,6 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../Styles'
 import CustomActivityIndicator from '../components/CustomActivityIndicator';
 import Api from '../components/Api';
+import MyContext from '../context/MyContext';
 
 export default class EditProfleScreen extends Component {
     constructor(){
@@ -23,12 +24,13 @@ export default class EditProfleScreen extends Component {
         }
     } 
     
-    updateProfile(first_Name,last_Name,email,phone_no,dob){
+    updateProfile(first_Name,last_Name,email,phone_no,dob,contextValue){
         return Api('users/update','POST',`first_name=${first_Name}&last_name=${last_Name}&email=${email}&profile_pic=${"abc.jpg"}&phone_no=${phone_no}&dob=${dob}`)
         .then((responseJson)=>{
         this.setState({datasource: responseJson}, function(){});
         console.log(responseJson)
         this.profileEditedSuccessfully()
+        contextValue.updateData()
         }).catch((err)=> {
             console.error(err)
         })
@@ -75,11 +77,14 @@ export default class EditProfleScreen extends Component {
                 <CustomTextInput sourceImage={R.images.dob_icon} autoCapitalize="none" onChangeText={dob=>this.setState({dob})} placeholderValue='DOB'/>
 
                 {/* <View style={{ justifyContent: 'center', alignItems: 'center'}}> */}
+                <MyContext.Consumer>
+                {contextValue=>
                 <CustomButton title="SUBMIT" 
                 onPress={()=> 
                     
-                 this.updateProfile(this.state.first_name,this.state.last_name,this.state.email,this.state.phone_no,this.state.dob)}
-                />
+                 this.updateProfile(this.state.first_name,this.state.last_name,this.state.email,this.state.phone_no,this.state.dob,contextValue)}
+                />}
+                </MyContext.Consumer>
                 {this.loadingView()}
                 </View>
                 </KeyboardAvoidingView>

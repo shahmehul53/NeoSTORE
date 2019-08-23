@@ -24,6 +24,7 @@ import AddressScreen from './app/src/screens/AddressScreen';
 import OrderDetailsScreen from './app/src/screens/OrderDetailsScreen';
 import LaunchScreen from './app/src/screens/LaunchScreen';
 import CustomDrawer from './app/src/components/CustomDrawer'
+import ProductList from './app/src/screens/ProductList';
 
 
 
@@ -146,6 +147,9 @@ import CustomDrawer from './app/src/components/CustomDrawer'
  const MainNavigator= createStackNavigator({
     Home:{
         screen: HomeScreen,
+    },
+    List:{
+        screen: ProductList
     },
     Tables:{
         screen: TablesScreen,

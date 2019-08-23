@@ -4,6 +4,7 @@ import R from '../R';
 import style from '../Styles'
 import { withOrientation } from 'react-navigation';
 import Api from '../components/Api';
+import MyContext from '../context/MyContext';
 
 // const WIDTH = Dimensions.get('window').width;
 // const HEIGHT = Dimensions.get('window').height;
@@ -15,7 +16,8 @@ export default class MenuDrawer extends Component{
         this.state = {
             datasource: [], 
             access_token: "",
-            cartCount: ""
+            cartCount: 0,
+            // cartItemQuantity: 0
         }
     }
 
@@ -29,7 +31,31 @@ export default class MenuDrawer extends Component{
 
      componentDidMount(){
          this.fetchData()
-     }   
+     } 
+     
+    //  getCartCount(){
+    //     return Api('cart','GET',null)
+    //     .then((responseJson)=>{
+    //     console.log(responseJson)
+    //     this.setState(
+    //     {
+    //         cartItemQuantity: responseJson.data.length                   
+    //     },
+    //     )       
+    //     }).catch((err)=> {
+    //         console.error(err)
+    //     })
+    //  }
+
+     displayCount(count){
+         if(count==1){
+             return(
+                 <MyContext.Consumer>
+                     {contextValue=><Text style={{color: 'white',paddingLeft: 100,fontSize: 25}}>{contextValue.state.count}</Text>}
+                 </MyContext.Consumer>
+             )
+         }
+     }
 
     fetchData(){
         return Api('users/getUserData','GET',null)
@@ -55,8 +81,15 @@ export default class MenuDrawer extends Component{
                 <View style={styles.profile}>
                     <View style={styles.imgView}>
                         <Image style={styles.img} source={R.images.profile} />
-                        <Text style={styles.name}>{this.state.datasource.first_name} {this.state.datasource.last_name}</Text>
-                        <Text style={{fontSize: 15, paddingBottom: 5, color: 'white'}}>{this.state.datasource.email}</Text>
+                        <MyContext.Consumer>
+                         {contextValue=>
+                         <View>
+                        {/* // <Text style={styles.name}>{this.state.datasource.first_name} {this.state.datasource.last_name}</Text> */}
+                        <Text style={styles.name}>{contextValue.state.userName}</Text>
+                        <Text style={{fontSize: 15, paddingBottom: 5, color: 'white'}}>{contextValue.state.userEmail}</Text>
+                         </View>}
+                        
+                        </MyContext.Consumer>
                     </View>
                 </View>
             </View>
@@ -65,7 +98,8 @@ export default class MenuDrawer extends Component{
                 <View style={styles.SectionStyle}>
                     <Image style={styles.imgIcon} source={R.images.shopping_cart}/>
                     {this.navLink('MyCart', 'My Cart')}
-                    <Text style={{fontSize: 25,color: "white",paddingLeft: 100}} >{this.state.cartCount}</Text> 
+                    {/* <Text style={{fontSize: 25,color: "white",paddingLeft: 100}} >{this.state.cartCount}</Text>  */}
+                    {this.displayCount(1)}
                     
                 </View>
                 <View style= {styles.SectionStyle}>
@@ -89,7 +123,7 @@ export default class MenuDrawer extends Component{
                     {this.navLink('MyAccount', 'My Account')}
                 </View>
                 <View style= {styles.SectionStyle}>
-                    <Image style= {styles.imgIcon} source={R.images.storelocator}/>
+                    <Image style= {styles.imgIcon} source={R.images.storelocator_icon}/>
                     {this.navLink('StoreLoactor', 'Store Locator')}
                 </View>
                 <View style= {styles.SectionStyle}>

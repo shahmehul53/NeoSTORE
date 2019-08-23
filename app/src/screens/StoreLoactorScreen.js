@@ -22,7 +22,7 @@ export default class StoreLocatorScreen extends Component {
         return(
             <View style={{flex: 1,justifyContent: 'center', alignItems: 'center'}}>
                 {/* <View style={{flex:1}}> */}
-                    <Image source={R.images.storelocator} style={{width: Dimensions.get('window').width, height: Dimensions.get('window').height}}/>
+                    <Image source={R.images.storelocator1} style={{width: Dimensions.get('window').width, height: Dimensions.get('window').height}}/>
                 {/* </View> */}
                 {/* <Text style={{fontSize: 30}}>Store Locator Screen</Text> */}
             </View>

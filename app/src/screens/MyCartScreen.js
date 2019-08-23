@@ -6,7 +6,8 @@ import CustomButtom from '../components/CustomButton';
 import CustomRedButton from '../components/CustomRedButton';
 import Swipeout from 'react-native-swipeout';
 import NumericInput from 'react-native-numeric-input'
-import Api from '../components/Api'
+import Api from '../components/Api';
+import MyContext from '../context/MyContext'
 
 width: Dimensions.get('window').width;
 height: Dimensions.get('window').height
@@ -73,6 +74,7 @@ export default class MyCartScreen extends Component {
             if (responseJson.status == 200) {
                 console.log(responseJson.status);
                 this.listCart();
+                //contextValue.state.count = responseJson.total_carts
             }
         console.log("deleted item"+ responseJson)
         }).catch(error => {
@@ -154,7 +156,21 @@ export default class MyCartScreen extends Component {
                                     leftButtonBackgroundColor='#E91C1A'
                                     //upDownButtonsBackgroundColor = '#E91C1A'
                                     />  
-                                    <Text style={{fontSize: 15,color: '#333333',marginLeft: 100,fontWeight: 'bold'}}>र {item.product.cost}</Text>
+                                    <Text style={{fontSize: 15,color: '#333333',marginLeft: 30,fontWeight: 'bold'}}>र {item.product.cost}</Text>
+                                    
+                                    <View style={{flex: 1,justifyContent: 'flex-end',flexDirection: 'row',alignItems: 'flex-end',paddingHorizontal: 30}}>
+                                    <MyContext.Consumer>
+                                        {contextValue=>(
+                                            <TouchableOpacity style={{paddingLeft: 40,paddingBottom: 50}} onPress={()=>{this.deleteItem(this.state.pid);
+                                            contextValue.minusCount();}}>
+                                            <Image style={{height: 50, width: 50}} source={R.images.delete}/>
+                                       </TouchableOpacity>
+                                        )}
+                                    {/* <TouchableOpacity style={{paddingLeft: 40,paddingBottom: 50}} onPress={()=>this.deleteItem(this.state.pid)}>
+                                         <Image style={{height: 50, width: 50}} source={R.images.delete}/>
+                                    </TouchableOpacity> */}
+                                    </MyContext.Consumer>
+                                    </View>
                                     </View>
                                     {/* <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end'}}>
                                         <Text style={{fontSize: 15,color: '#333333',alignItems: "flex-end",justifyContent: 'flex-end',paddingBottom: 10,fontWeight: 'bold'}}>र {item.product.cost}</Text>
