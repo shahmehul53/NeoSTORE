@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button,FlatList,Image,AsyncStorage } from 'react-native';
+import { View, Text, StyleSheet, Button,FlatList,Image,AsyncStorage,ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import R from '../R';
 import Api from '../components/Api'
-//import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class MyOrderScreen extends Component {
     constructor(){
         super()
         this.state = {
             datasource: [],
-            access_token: "",  
+            access_token: "",
+            isLoading: true  
         }
     }
 
@@ -23,77 +23,78 @@ export default class MyOrderScreen extends Component {
         return Api('orderList','GET',null)
         .then((responseJson)=>{
             console.log(responseJson)
-            this.setState(
-                {
-                    datasource: responseJson.data.reverse()
-                }
-            )   
+            if(responseJson.status == 200){
+                this.setState(
+                    {
+                        datasource: responseJson.data.reverse(),
+                        isLoading: !this.state.isLoading
+                    }
+                )   
+            }   
         }).catch((err)=> {
             console.error(err)
         })
       }
         
     render(){
-        return(
-            <View style={styles.container}>
-
-             
-                <FlatList
-                data={this.state.datasource}
-                renderItem = {({item})=>(
-                // <View style={{borderRadius: 15,backgroundColor: "#708090"}}>
-                    
-                    <TouchableOpacity 
-                       onPress={()=> this.props.navigation.navigate("OrderDetails", {
+        if (this.state.isLoading){
+            return(
+                <View style={{flex: 1,justifyContent: 'center', alignItems: 'center'}}>
+                    <ActivityIndicator
+                    size= "large"
+                    color= "#E91C1A"
+                     >
+                    </ActivityIndicator>
+                </View>
+            );
+        } 
+        else {
+            return(
+                 <View style={styles.container}>
+                    <FlatList
+                    data={this.state.datasource}
+                    renderItem = {({item})=>(
+                        <View style={{color: 'dark grey'}}>
+                        <TouchableOpacity 
+                        onPress={()=> this.props.navigation.navigate("OrderDetails", {
                         OrderID: item.id
-                    })}
-                      style={{margin: 10,height: 80}}>
-                    <View style={{margin: 10, flexDirection: "row"}}>
-                        <View style={styles.OrderId}>
-                            <Text style={styles.orderIDText}>Order ID: {item.id}</Text>
-                            
-                            <View style={styles.lineStyle} />
-                            
-                            <Text style={styles.createdText}>Order Date: {item.created}</Text>
-                        
-                        </View>
-                        
+                        })}
+                        style={{margin: 10,height: 80}}>
+                        <View style={{margin: 10, flexDirection: "row"}}>
+                            <View style={styles.OrderId}>
+                                <Text style={styles.orderIDText}>Order ID: {item.id}</Text>
+                                <View style={styles.lineStyle} />
+                                <Text style={styles.createdText}>Order Date: {item.created}</Text>
+                            </View>
                         <View style={styles.costView}> 
                             <Text style={styles.costText}>Rs.{item.cost}</Text>  
                         </View> 
-                        {/* <View style={{borderWidth:1,width:150,borderColor: '#EDEDED'}}/> */}
-                    </View>
-                    </TouchableOpacity>
-                     
-                    // </View>
-                    
-
-                )}
-                keyExtractor={(item, index) => index.toString()}
-                
-                />
-                
-                
-                
-            </View>
-        )
+                        </View>
+                        </TouchableOpacity>
+                        <View style={{borderWidth:1,width:"100%",borderColor: '#a9a9a9'}}/>
+                        </View>
+                        
+                        
+                        
+                        )}
+                        keyExtractor={(item, index) => index.toString()}
+                    />        
+                </View>
+                ) 
+            }  
     }
 }
 
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        //justifyContent: 'center',
-        //alignItems: 'center'
     },
     spinnerTextStyle: {
         color: '#FFF'
       },
     OrderId:{
         flex: 1,
-        //flexDirection: 'row'
         justifyContent: 'flex-start',
-        //margin: 10
     },
     orderIDText:{
         fontSize: 16,
@@ -105,7 +106,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor:'#4f4f4f',
         width: 165
-        //margin:10,
     },
     createdText:{
         fontSize: 13,
@@ -115,14 +115,12 @@ const styles = StyleSheet.create({
     },
     costView:{
         flex: 1,
-        //flexDirection:'row',
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
         
 
     },
     costText:{
-        //flex: 2,
         alignItems: "flex-end",
         justifyContent: 'flex-end',
         fontSize: 20,

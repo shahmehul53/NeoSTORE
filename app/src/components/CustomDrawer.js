@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {StyleSheet, Text, View,FlatList, Dimensions, TouchableOpacity, Image,AsyncStorage} from 'react-native';
 import R from '../R';
 import style from '../Styles'
+import MyContext from '../context/MyContext';
 //import { FlatList } from 'react-native-gesture-handler';
 
 const DEVICE_WIDTH = Dimensions.get("window").width
@@ -13,83 +14,105 @@ export default class CustomDrawer extends Component{
         super()
         this.state = 
         {
-            datasource: [], 
+            datasource: [],
+            userName: '', 
+            userEmail: '',
             access_token: "",
-            cartCount: "",
+            cartCount: 0,
             drawerData:[
-                {image:R.images.shopping_cart,title: 'My Cart', action:'MyCart'},
-                {image: R.images.table, title: 'Tables', action: 'Tables', id: 1},
-                {image: R.images.sofa, title: 'Sofas', action: 'Sofas', id: 3},
-                {image: R.images.chair, title: 'Chairs', action: 'Chairs', id: 2},
-                {image: R.images.cupboard, title: 'Cupboards', action: 'Cupboards', id: 4},
-                {image:R.images.username_icon,title: 'My Account', action:'MyAccount'},
-                {image:R.images.storelocator_icon,title: 'Store Locator', action:'StoreLoactor'},
-                {image:R.images.myorders_icon,title: 'My Orders', action:'MyOrder'},
-                {image:R.images.logout_icon,title: 'Logout', action:'Login'}
+                {image:R.images.shopping_cart,title: 'My Cart', screen:'MyCart',cartCount: 1},
+                {image: R.images.table, title: 'Tables', screen: 'List',productType: 'Tables', id: 1,cartCount: 0},
+                {image: R.images.sofa, title: 'Sofas', screen: 'List',productType: 'Sofas', id: 3,cartCount: 0},
+                {image: R.images.chair, title: 'Chairs', screen: 'List',productType: 'Chairs', id: 2, cartCount: 0},
+                {image: R.images.cupboard, title: 'Cupboards', screen: 'List',productType: 'Cupboards', id: 4, cartCount: 0},
+                {image:R.images.username_icon,title: 'My Account', screen:'MyAccount',cartCount: 0},
+                {image:R.images.storelocator_icon,title: 'Store Locator', screen:'StoreLoactor',cartCount: 0},
+                {image:R.images.myorders_icon,title: 'My Orders', screen:'MyOrder',cartCount: 0},
+                {image:R.images.logout_icon,title: 'Logout', screen:'Login',cartCount: 0}
             ]
         }
     }
 
+    displayCount(count){
+        if(count==1){
+            return(
+                <MyContext.Consumer>
+                    {contextValue=><Text style={{color: 'white',paddingLeft: 100,fontSize: 25}}>{contextValue.state.count}</Text>}
+                </MyContext.Consumer>
+            )
+        }
+    }
+
+    displayData = async()=>{
+        try{
+            const fname = await AsyncStorage.getItem("@storage_Key_fname")
+            const lname = await AsyncStorage.getItem("@storage_Key_lname")
+            const userEmail = await AsyncStorage.getItem("@storage_Key_email")
+            this.setState({
+                userName: fname+ " " + lname,
+                userEmail: userEmail
+            })
+        }catch(error){
+            console.log(error)
+        }
+    }
+
     componentDidMount(){
-        this.fetchData()
+        //this.fetchData()
+        this.displayData()
     }   
 
-   async fetchData(){
-       const token = await AsyncStorage.getItem("@storage_Key_token");
-       this.setState({ access_token: token });
-       console.log(token);
-       fetch('http://staging.php-dev.in:8844/trainingapp/api/users/getUserData',{
-          method: 'GET',
-          headers:{
-           //'access_token': "5d2eb4b6ca059",
-           access_token: token,
-           'Content-Type': 'application/x-www-form-urlencoded',
-           },
-       }).then((response)=>response.json())
-       .then((responseJson)=>{
-           console.log(responseJson)
-           this.setState(
-               {
-                   datasource: responseJson.data.user_data,
-                   cartCount: responseJson.data.total_carts
-               }
-           ) 
-       }).catch((err)=> {
-           console.error(err)
-       })
-   }
+//    async fetchData(){
+//        const token = await AsyncStorage.getItem("@storage_Key_token");
+//        this.setState({ access_token: token });
+//        console.log(token);
+//        fetch('http://staging.php-dev.in:8844/trainingapp/api/users/getUserData',{
+//           method: 'GET',
+//           headers:{
+//            //'access_token': "5d2eb4b6ca059",
+//            access_token: token,
+//            'Content-Type': 'application/x-www-form-urlencoded',
+//            },
+//        }).then((response)=>response.json())
+//        .then((responseJson)=>{
+//            console.log(responseJson)
+//            this.setState(
+//                {
+//                    datasource: responseJson.data.user_data,
+//                    cartCount: responseJson.data.total_carts
+//                }
+//            ) 
+//        }).catch((err)=> {
+//            console.error(err)
+//        })
+//    }
 
    render(){
+       this.displayData()
        return(
            <View style={styles.container}>
-                <View style={styles.topLinks}>
-                    <View style={styles.profile}>
+                    <View style={{alignItems: 'center', paddingTop: 30}}>
                       <Image style={styles.img} source={R.images.profile} />
-                      <Text style={styles.name}>{this.state.datasource.first_name} {this.state.datasource.last_name}</Text>
-                      <Text style={{fontSize: 15, paddingBottom: 5, color: 'white'}}>{this.state.datasource.email}</Text>
+                      <MyContext.Consumer>
+                          {contextValue=><View style={{justifyContent: 'center',alignItems: 'center'}}>
+                          <Text style={styles.name}>{contextValue.state.userName}</Text>
+                          <Text style={{fontSize: 15, paddingBottom: 5, color: 'white'}}>{contextValue.state.userEmail}</Text>
+                          </View>}
+                      </MyContext.Consumer>
                     </View>
-                </View>
-               {/* <View style={styles.imgView}>
-                   <Image style={styles.img} source={R.images.profile}/>
-                   <Text style={styles.name}>{this.state.datasource.first_name} {this.state.datasource.last_name}</Text>
-                   <Text style={{fontSize: 15, paddingBottom: 5, color: 'white'}}>{this.state.datasource.email}</Text>
-               </View> */}
                <FlatList
                data={this.state.drawerData}
                renderItem={({item})=>
-               <View style={styles.bottomLinks}>
-                   <View style= {styles.SectionStyle}>
                <TouchableOpacity style={styles.drawerView} key={item.image}
-                onPress={()=>this.props.navigation.navigate(item.action,{id: item.id})}>
+                onPress={()=>this.props.navigation.navigate(item.screen,{id: item.id, productCategory: item.productType})}>
                 
-                {/* <View style= {styles.SectionStyle}> */}
+                <View style={{flexDirection: 'row',alignItems:'center'}}>
                 <Image style={{height: 35,width: 35}} source={item.image}/>
                 <Text style={styles.textData}>{item.title}</Text>
-                {/* </View> */}
+                {this.displayCount(item.cartCount)}
+                </View>
                 
             </TouchableOpacity>
-            </View>
-           </View>
         }
         keyExtractor={(item, index) => index.toString()}
         />
@@ -102,8 +125,7 @@ export default class CustomDrawer extends Component{
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        //height: DEVICE_HEIGHT,
-        //width: DEVICE_WIDTH
+        backgroundColor: 'black'
     },
     imgView:{
         flex: 1,
@@ -124,8 +146,6 @@ const styles = StyleSheet.create({
         paddingTop: 10
     },
     profile: {
-        //flex: 1,
-        //flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         paddingTop: 25,
@@ -133,22 +153,16 @@ const styles = StyleSheet.create({
         borderBottomColor: '#777777'
     },
     topLinks:{
-        //flex:2,
-        //height: DEVICE_HEIGHT/2,
         backgroundColor: 'black'
     },
     drawerView:{
         marginLeft: 10,
         flexDirection: 'row',
-        //paddingLeft: 30,
         marginTop: 25
     },
     textData:{
-        //flex: 1,
         fontSize: 20,
         padding: 6,
-        //paddingLeft: 14,
-       // margin: 5,
         textAlign: 'center',
         color: 'white'
     },
@@ -156,7 +170,6 @@ const styles = StyleSheet.create({
         flex: 2,
         backgroundColor: 'black',
         paddingTop: 10,
-        //paddingBottom: 450,
     },
     SectionStyle:{
         flexDirection: 'row',

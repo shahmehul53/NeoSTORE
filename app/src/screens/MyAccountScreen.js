@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button,Image,AsyncStorage,KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, Button,Image,AsyncStorage,KeyboardAvoidingView,ActivityIndicator } from 'react-native';
 import R from '../R';
 import CustomTextInput from '../components/CustomTextInput'
 import CustomButton from '../components/CustomButton';
@@ -15,7 +15,8 @@ export default class MyAccountScreen extends Component {
         this.state = {
             datasource: [], 
             access_token: "",
-            id: ""
+            id: "",
+            isLoading: true
         }
     }
 
@@ -27,86 +28,103 @@ export default class MyAccountScreen extends Component {
         return Api('users/getUserData','GET',null)
         .then((responseJson)=>{
             console.log(responseJson)
-            this.setState(
-                {
-                    datasource: responseJson.data.user_data,
-                }
-            )         
-        console.log("data is:"+this.state.datasource)
+            if(responseJson.status == 200){
+                this.setState(
+                    {
+                        datasource: responseJson.data.user_data,
+                        isLoading: !this.state.isLoading
+                    }
+                )   
+            }
+                  
         }).catch((err)=> {
             console.error(err)
         })
     }
         
-    render(){  
-        return(
-        <View style={style.container}>
-            <KeyboardAvoidingView  behavior="padding" enabled>
-                <View style={styles.imgView}>
-                <Image style={styles.imgStyle} source={R.images.user_male}/>
+    render(){
+        if (this.state.isLoading){
+            return(
+                <View style={{flex: 1,justifyContent: 'center', alignItems: 'center'}}>
+                    <ActivityIndicator
+                    size= "large"
+                    color= "#E91C1A"
+                     >
+                    </ActivityIndicator>
                 </View>
-
-                <View style={styles.textProfile}>
-                    <View style={styles.textIcon}>
-                        <Image source={R.images.username_icon}/>
+            );
+        }
+        else{
+            return(
+                <View style={style.container}>
+                    <KeyboardAvoidingView  behavior="padding" enabled>
+                        <View style={styles.imgView}>
+                        <Image style={styles.imgStyle} source={R.images.user_male}/>
+                        </View>
+        
+                        <View style={styles.textProfile}>
+                            <View style={styles.textIcon}>
+                                <Image source={R.images.username_icon}/>
+                            </View>
+                            <View style={styles.textInput}>
+                                <Text style={styles.textInputText}>{this.state.datasource.first_name}</Text>
+                            </View>
+                        </View>
+        
+                        <View style={styles.textProfile}>
+                            <View style={styles.textIcon}>
+                                <Image source={R.images.username_icon}/>
+                            </View>
+                            <View style={styles.textInput}>
+                                <Text style={styles.textInputText}>{this.state.datasource.last_name}</Text>
+                            </View>
+                        </View>
+        
+                        <View style={styles.textProfile}>
+                            <View style={styles.textIcon}>
+                                <Image source={R.images.email_icon}/>
+                            </View>
+                            <View style={styles.textInput}>
+                                <Text style={styles.textInputText}>{this.state.datasource.email}</Text>
+                            </View>
+                        </View>
+        
+                        <View style={styles.textProfile}>
+                            <View style={styles.textIcon}>
+                                <Image source={R.images.cellphone}/>
+                            </View>
+                            <View style={styles.textInput}>
+                                <Text style={styles.textInputText}>{this.state.datasource.phone_no}</Text>
+                            </View>
+                        </View>
+        
+                        <View style={styles.textProfile}>
+                            <View style={styles.textIcon}>
+                                <Image source={R.images.dob_icon}/>
+                            </View>
+                            <View style={styles.textInput}>
+                                <Text style={styles.textInputText}>{this.state.datasource.dob}</Text>
+                            </View>
+                        </View>
+                        
+                        <View style={{ justifyContent: 'center', alignItems: 'center'}}>
+                        <CustomButton title="EDIT PROFILE"
+                        onPress={()=> this.props.navigation.navigate('EditProfile')}/>
+                         </View>
+                        
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', justifyContent: 'flex-end'}}>
+        
+                        <View style={{backgroundColor: R.color.textInputBorderColor, height: 52, width: 400}}>
+                            <TouchableOpacity style={styles.button} onPress={()=> this.props.navigation.navigate('ResetPassword')}>
+                                <Text style={styles.resetPasswordText}>RESET PASSWORD</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <View style={styles.textInput}>
-                        <Text style={styles.textInputText}>{this.state.datasource.first_name}</Text>
-                    </View>
+                    </KeyboardAvoidingView>
                 </View>
-
-                <View style={styles.textProfile}>
-                    <View style={styles.textIcon}>
-                        <Image source={R.images.username_icon}/>
-                    </View>
-                    <View style={styles.textInput}>
-                        <Text style={styles.textInputText}>{this.state.datasource.last_name}</Text>
-                    </View>
-                </View>
-
-                <View style={styles.textProfile}>
-                    <View style={styles.textIcon}>
-                        <Image source={R.images.email_icon}/>
-                    </View>
-                    <View style={styles.textInput}>
-                        <Text style={styles.textInputText}>{this.state.datasource.email}</Text>
-                    </View>
-                </View>
-
-                <View style={styles.textProfile}>
-                    <View style={styles.textIcon}>
-                        <Image source={R.images.cellphone}/>
-                    </View>
-                    <View style={styles.textInput}>
-                        <Text style={styles.textInputText}>{this.state.datasource.phone_no}</Text>
-                    </View>
-                </View>
-
-                <View style={styles.textProfile}>
-                    <View style={styles.textIcon}>
-                        <Image source={R.images.dob_icon}/>
-                    </View>
-                    <View style={styles.textInput}>
-                        <Text style={styles.textInputText}>{this.state.datasource.dob}</Text>
-                    </View>
-                </View>
-                
-                <View style={{ justifyContent: 'center', alignItems: 'center'}}>
-                <CustomButton title="EDIT PROFILE"
-                onPress={()=> this.props.navigation.navigate('EditProfile')}/>
-                 </View>
-                
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', justifyContent: 'flex-end'}}>
-
-                <View style={{backgroundColor: R.color.textInputBorderColor, height: 52, width: 400}}>
-                    <TouchableOpacity style={styles.button} onPress={()=> this.props.navigation.navigate('ResetPassword')}>
-                        <Text style={styles.resetPasswordText}>RESET PASSWORD</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-            </KeyboardAvoidingView>
-    </View>
-        )
+            )
+        }
+        
     }
 
 }

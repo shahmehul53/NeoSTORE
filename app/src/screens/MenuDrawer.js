@@ -17,7 +17,6 @@ export default class MenuDrawer extends Component{
             datasource: [], 
             access_token: "",
             cartCount: 0,
-            // cartItemQuantity: 0
         }
     }
 

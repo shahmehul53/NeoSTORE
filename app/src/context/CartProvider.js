@@ -51,6 +51,21 @@ export default class CartProvider extends Component{
         })
     }
 
+    displayData = async()=>{
+        try{
+            const fname = await AsyncStorage.getItem("@storage_Key_fname")
+            const lname = await AsyncStorage.getItem("@storage_Key_lname")
+            const userEmail = await AsyncStorage.getItem("@storage_Key_email")
+            this.setState({
+                userName: fname+ " " + lname,
+                userEmail: userEmail
+            })
+        }catch(error){
+            console.log(error)
+        }
+    }
+    
+
     increaseCount=()=>{
         this.setState({count:this.state.count+1})
     }
@@ -68,7 +83,8 @@ export default class CartProvider extends Component{
                 state: this.state,
                 plusCount:this.increaseCount,
                 minusCount: this.decreaseCount,
-                updateData: this.updateData
+                updateData: this.updateData,
+                displayData : this.displayData
             }
         }>
             {this.props.children}

@@ -20,17 +20,18 @@ export default class EditProfleScreen extends Component {
             last_name: "",
             email: "",
             phone_no: "",
-            dob: ""
+            dob: "",
+            isLoading: true
         }
     } 
     
     updateProfile(first_Name,last_Name,email,phone_no,dob,contextValue){
         return Api('users/update','POST',`first_name=${first_Name}&last_name=${last_Name}&email=${email}&profile_pic=${"abc.jpg"}&phone_no=${phone_no}&dob=${dob}`)
         .then((responseJson)=>{
+        console.log(responseJson.status)
         this.setState({datasource: responseJson}, function(){});
-        console.log(responseJson)
-        this.profileEditedSuccessfully()
         contextValue.updateData()
+        this.profileEditedSuccessfully()
         }).catch((err)=> {
             console.error(err)
         })
@@ -84,8 +85,9 @@ export default class EditProfleScreen extends Component {
                     
                  this.updateProfile(this.state.first_name,this.state.last_name,this.state.email,this.state.phone_no,this.state.dob,contextValue)}
                 />}
+                
                 </MyContext.Consumer>
-                {this.loadingView()}
+                {/* {this.loadingView()} */}
                 </View>
                 </KeyboardAvoidingView>
          </View>

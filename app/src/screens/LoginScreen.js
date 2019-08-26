@@ -7,6 +7,7 @@ import CustomButton from '../components/CustomButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CustomActivityIndicator from '../components/CustomActivityIndicator';
 import Api from '../components/Api';
+import MyContext from '../context/MyContext';
 
 let winSize = Dimensions.get('window');
 console.log(winSize);
@@ -23,11 +24,14 @@ export default class LoginScreen extends Component {
        }
    } 
 
-   loginUser(){
+   loginUser(contextValue){
        const username = this.state.username
        const password = this.state.password
     return Api('users/login','POST',`email=${username}&password=${password}`)
         .then((responseJson)=>{
+            if(responseJson.status==200){
+                contextValue.displayData()   
+            }
             console.log(responseJson)
             this.setState({
                 datasource: responseJson
@@ -62,10 +66,12 @@ export default class LoginScreen extends Component {
         }
     }
 
-    async saveData(val1,val2,val3,val4){
+    async saveData(val1,val2,val3,val4,userName){
         const fname = ["@storage_Key_fname", val1];
         const lname = ["@storage_Key_lname", val2];
         const email = ["@storage_Key_email", val3];
+        //let userName = fname + lname
+        //const name = ["@storage_Key_uname",userName]
         const access_token = ["@storage_Key_token",val4];
         try{
             await AsyncStorage.multiSet([fname,lname,email,access_token])
@@ -89,10 +95,13 @@ export default class LoginScreen extends Component {
                   <Text style={style.headerTitleStyle}>{R.strings.AppName}</Text> 
                   <CustomTextInput sourceImage={R.images.username_icon}  placeholderValue='Username' keyboardType="email-address" autoCapitalize="none" onChangeText={(username)=>this.setState({username})}></CustomTextInput>
                   <CustomTextInput sourceImage={R.images.password_icon}  placeholderValue='Password' secureTextEntry = {true} autoCapitalize="none" onChangeText={(password)=>this.setState({password})}></CustomTextInput>
-                  <CustomButton title='LOGIN' 
+                  <MyContext.Consumer>
+                    {contextValue=><CustomButton title='LOGIN' 
                      onPress={()=> this.props.navigation.navigate('Home')}
-                    // onPress={()=> this.loginUser()}
-                   ></CustomButton>
+                    //onPress={()=> this.loginUser(contextValue)}
+                   ></CustomButton>}
+                  </MyContext.Consumer>
+                  
                   <TouchableOpacity onPress={()=>{this.props.navigation.navigate('ForgotPassword')}}>
                       <Text style={style.forgotBtn}>Forgot Password?</Text>
                   </TouchableOpacity>
