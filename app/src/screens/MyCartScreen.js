@@ -131,7 +131,7 @@ export default class MyCartScreen extends Component {
             if(this.state.cartCount!=null){
                 return(
                     <View style={{flex: 1}}>
-                        <View style={{flex:1}}>
+                        <View style={{flex:1,width: '100%'}}>
                             <FlatList
                               data={this.state.datasource}
                               renderItem={({ item }) => (
@@ -153,11 +153,8 @@ export default class MyCartScreen extends Component {
                                             {item.product.name}
                                            </Text>
                                            <Text>({item.product.product_category})</Text>
-                                           {/* <Text style={{paddingTop: 10}}>Qty: {item.quantity}</Text> */}
                                            <View style={{paddingTop: 10, flexDirection: 'row'}}>
-                                           <NumericInput 
-                                             
-                                             //value={this.state.value} 
+                                           <NumericInput  
                                              onChange={value => this.editCart(value,item.product.id)}
                                              totalWidth={100} 
                                              totalHeight={25} 
@@ -173,7 +170,6 @@ export default class MyCartScreen extends Component {
                                              borderColor='black'
                                             rightButtonBackgroundColor='#E91C1A' 
                                             leftButtonBackgroundColor='#E91C1A'
-                                            //upDownButtonsBackgroundColor = '#E91C1A'
                                             />  
                                             <Text style={{fontSize: 15,color: '#333333',marginLeft: 30,fontWeight: 'bold'}}>र {item.product.cost}</Text>
                                             

@@ -129,8 +129,6 @@ export default class RegisterScreen extends Component {
               F: R.images.chkn
             });
         }
-        console.log(n);
-        console.log(this.state.gender);
     }
     
 
@@ -140,7 +138,7 @@ export default class RegisterScreen extends Component {
         console.log(this.state.datasource)
         return (
             <View style={style.container}>
-                {/* <KeyboardAvoidingView  behavior="padding" enabled> */}<ScrollView>
+               <ScrollView contentContainerStyle={style.container}>
                 <View style={style.RegisterView}>
                 
                 <Text style={style.headerTitleStyle}>{R.strings.AppName}</Text>
@@ -183,7 +181,7 @@ export default class RegisterScreen extends Component {
                  this.registerUser(this.state.first_name,this.state.last_name,this.state.email,this.state.password,this.state.confirm_password,this.state.gender,this.state.phone_no)} ></CustomButton> 
                  {this.loadingView()}
                 </View>
-                {/* </KeyboardAvoidingView> */}
+               
                 </ScrollView>
                 
             </View>

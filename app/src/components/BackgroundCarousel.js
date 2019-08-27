@@ -3,7 +3,7 @@ import { StyleSheet, View, ScrollView, Dimensions,Image} from 'react-native'
 
 const DEVICE_WIDTH = Dimensions.get("window").width
 
-class BackgroundCarousel extends Component{
+export default class BackgroundCarousel extends Component{
     scrollRef = React.createRef();
     constructor(props){
         super(props)
@@ -96,8 +96,8 @@ const styles = StyleSheet.create({
         height: 6,
         borderRadius: 3,
         margin: 5,
-        backgroundColor: '#E91C1A'
+        backgroundColor: '#fff'
     }
 })
 
-export {BackgroundCarousel};
+//export {BackgroundCarousel};

@@ -10,6 +10,7 @@ import MyContext from '../context/MyContext';
 import {scale} from 'react-native-size-matters';
 
 
+
 export default class ProductDetails extends Component{
     constructor(){
         super()
@@ -28,23 +29,30 @@ export default class ProductDetails extends Component{
             maxRating: 5,
             status: "",
             user_msg: "",
-            isLoading: true
+            isLoading: true,
+            transparent: false,
         };
     }
 
     addToCart(){
         const { navigation } = this.props;
+        const { navigate } = this.props.navigation;
         const quantity = this.state.quantity;
         console.log(this.state.quantity);
         const product_id = navigation.getParam("productID", "1");
         return Api('addToCart','POST', `product_id=${product_id}&quantity=${quantity}`)
         .then((responseJson)=>{
         console.log(responseJson)
-        // this.setState({datasource: responseJson})
-        // if(this.state.datasource.status == 401){
-        //     alert(this.state.datasource.user_msg)
-        // }
-        }).catch(error => {
+        if(responseJson.status == 200){
+            alert(responseJson.user_msg),
+            //this.setQuantityModalVisible(!this.state.quantityModalVisible);
+        setTimeout(function(){
+            navigate("Home");
+        },1000);
+    } else if(responseJson.status == 401){
+        alert(responseJson.user_msg)
+    } 
+    }).catch(error => {
             console.error(error);
         });
     }
@@ -52,11 +60,18 @@ export default class ProductDetails extends Component{
 
      setRatings(){
         const { navigation } = this.props;
+        const { navigate } = this.props.navigation;
         const product_id = navigation.getParam("productID", "1");
         const userRating = this.state.user_Ratings;
         return Api('products/setRating','POST',`product_id=${product_id}&rating=${userRating}`)
         .then((responseJson)=>{
-            console.log(responseJson)
+            if(responseJson.status == 200){
+                alert(responseJson.user_msg),
+                //this.setQuantityModalVisible(!this.state.quantityModalVisible);
+            setTimeout(function(){
+                navigate("Home");
+            },1000);
+        }
         })
         .catch(error => {
             console.error(error);
@@ -70,14 +85,12 @@ export default class ProductDetails extends Component{
     }
     
     onButtonClick(){
-        //if(this.state.datasource.status == 200){
-            this.setQuantityModalVisible(!this.state.quantityModalVisible);
-             this.addToCart();
-        //}
+            //this.setQuantityModalVisible(!this.state.quantityModalVisible);
+            this.addToCart();
     }
 
     onRatingButtonClick(){
-        this.setRatingModalVisible(!this.state.ratingModalVisible);
+        //this.setRatingModalVisible(!this.state.ratingModalVisible);
         this.setRatings();
     }
 
@@ -177,36 +190,50 @@ export default class ProductDetails extends Component{
         }
         else{
             return(
-                <View style={{flex: 1}}>
-                    <View style={{flex: 2}}>
+                <View style={{flex: 1,backgroundColor: '#e8e4e3',width: '100%'}}>
+                    
+                        <View style={{flex: 1.5,backgroundColor: 'white',width: '100%'}}>
                         <Text style={{fontSize: 25, paddingLeft: 20, marginTop: 10, fontWeight: 'bold',color: '#262626'}}>{this.state.datasource.name}</Text>
                         <Text style={{fontSize: 20, color: '#4f4f4f',fontWeight: 'bold',paddingLeft: 20}}>{this.categoryChange()}</Text>
                         <View style={{flexDirection: 'row'}}>
                            <Text style={{fontSize: 14, color: '#4f4f4f',fontWeight: 'bold',paddingLeft: 20}}>{this.state.datasource.producer}</Text>
-                           <View style={{marginLeft: 200}}>
+                           <View style={{flex:1,justifyContent: 'flex-end',alignItems: 'flex-end',marginRight: 20}}>
                                 <UserRatings ratings={this.state.datasource.rating}/>
                            </View>
                         </View>
-                    </View>
-                    <View style={{flex: 6}}>
-                       <View style={{flexDirection:'row'}}>
+                        </View>
+                     
+                     
+                   
+                    <View style={{flex: 7,borderRadius: 10,backgroundColor: 'white',marginTop: 10,borderBottomColor: 'grey',marginLeft: 10,marginBottom:10,marginRight: 10}}>
+                    <ScrollView>
+                    {/* <View style={{flex: 7}}> */}
+                        {/* <View style={{borderRadius: 10,backgroundColor: 'white',marginTop: 10,borderBottomColor: 'grey',marginLeft: 10,marginBottom:10,marginRight: 10}}> */}
+                       <View style={{flexDirection:'row',marginTop: 5,marginBottom: 10}}>
                             <Text style={{color: '#FE4040',fontSize:25,paddingLeft: 20}}>Rs.{this.state.datasource.cost}</Text>
-                            <TouchableOpacity style={{paddingLeft: 190}}>
+                            <View style={{flex: 1,justifyContent: 'center',alignItems: 'flex-end',marginRight: 20}}>
+                            <TouchableOpacity >
                                 <Image source={R.images.share} />
                             </TouchableOpacity> 
+                            </View>
                         </View>
                         <View style={{justifyContent: 'center',alignItems: 'center'}}>{this.renderLargeImage()}</View>
-                        <View style={{paddingLeft: 20}}>
+                        <View style={{paddingLeft: 20,paddingTop: 8,paddingRight: 20}}>
                             <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={true} nestedScrollEnabled>
                                 {this.renderImages()}
-                            </ScrollView>      
+                            </ScrollView>
                         </View>
                         <Text style={{color: "#111111",fontWeight: 'bold',fontSize: 18, marginLeft: 20}}>DESCRIPTION:</Text>
-                        <ScrollView > 
-                            <Text style={{marginTop: 2, paddingLeft: 10,fontWeight: 'bold', color: '#333333',fontSize: 14, marginLeft: 10}}>{this.state.datasource.description}</Text>
+                        <ScrollView nestedScrollEnabled> 
+                            <Text style={{marginTop: 1, paddingLeft: 10,fontWeight: 'bold', color: '#333333',fontSize: 14, marginLeft: 10,marginRight: 20 }}>{this.state.datasource.description}</Text>
                         </ScrollView>
+                        </ScrollView>
+                        {/* </Vi ew> */}
                     </View>
-                    <View style={{flex: 1, flexDirection:'row',justifyContent:'center',paddingVertical: 10}}>
+                    
+                    
+                    
+                    <View style={{flex: 1, flexDirection:'row',justifyContent:'center',alignItems: 'center',paddingVertical: 10,backgroundColor: 'white'}}>
                         <View style={{marginLeft: 20}}>
                             <TouchableOpacity style={{width: 160, height: 45,backgroundColor: '#E91C1A', borderRadius: 10}}
                                onPress={()=>{
@@ -223,17 +250,23 @@ export default class ProductDetails extends Component{
                                 <Text style={{fontSize: 18, fontWeight: '500',color: '#5C5858', textAlign: 'center',paddingVertical: 10}}>RATE</Text>
                             </TouchableOpacity>
                         </View> 
+                    
                     </View> 
+
+                    {/* <View style={{justifyContent: 'center',alignItems: 'center',opacity: 10}}> */}
                         <Modal 
-                            animationType="fade"
+                            animationType="slide"
                             transparent={true}
+                            
                             visible={this.state.quantityModalVisible}>
                                 
+                                
+                                {/* <View style={{opacity: 0.5}}>    */}
                                 <TouchableOpacity
                                 style={{flex: 1}}
                                 activeOpacity={1}
                                 onPressOut={() => {this.setQuantityModalVisible(false)}}>
-                            <ScrollView>
+                            <ScrollView >
                                
                                 
                             <View style={{flex: 1,backgroundColor: '#a9a9a9'}}>    
@@ -245,20 +278,6 @@ export default class ProductDetails extends Component{
                                         <TextInput style={{fontSize: 20,paddingBottom: 10,paddingTop: 10,borderWidth: 3,borderRadius: 10,borderColor:'#000000', width: 120,height: 50, textAlign: 'center'}} 
                                          onChangeText={quantity=>
                                          this.setState({quantity: quantity})} />
-                                         {/* <InputSpinner
-                                          max={8}
-                                          min={1}
-                                          step={1}
-                                          colorMax={"#E91C1A"}
-                                          colorMin={"#E91C1A"}
-                                        //   onMax={()=>{
-                                        //       alert("Quantity must be 1 to 8")
-                                        //   }}
-                                        //   onMin={()=>{
-                                        //     alert("Enter atleast 1 Quantity")
-                                        //   }}
-                                          value={this.state.quantity}
-                                          onChange={(quantity)=>this.setState({quantity: quantity})}/> */}
                                     </View>
                                     <MyContext.Consumer>
                                         {contextValue=>(
@@ -274,18 +293,21 @@ export default class ProductDetails extends Component{
                                 </View>    
                             </View> 
                             </ScrollView> 
+                            
                             </TouchableOpacity>  
-                              
+                            {/* </View> */}
                         </Modal>
+                        {/* </View> */}
                         
                         <Modal 
-                        animationType="fade"
-                        transparent={true}
+                        animationType='fade'
+                        transparent={false}
                         visible={this.state.ratingModalVisible}>
-                            <TouchableOpacity
+                        
+                            {/* <TouchableOpacity
                                 style={{flex: 1}}
                                 activeOpacity={1}
-                                onPressOut={() => {this.setRatingModalVisible(false)}}>
+                                onPressOut={() => {this.setRatingModalVisible(false)}}> */}
                                
                             <View style={{flex: 1,backgroundColor: '#a9a9a9'}}>
                                 <View style={modalStyles.modal}>
@@ -302,7 +324,8 @@ export default class ProductDetails extends Component{
                                     </View>
                                     </View>
                                 </View> 
-                                </TouchableOpacity> 
+                                {/* </TouchableOpacity>  */}
+                                
                         </Modal>       
                 </View>
             )
@@ -321,6 +344,10 @@ const modalStyles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
         borderWidth: 2,
-        borderColor: '#4f4f4f'
-     }
+        borderColor: '#4f4f4f',
+     },
+     innerContainer: {
+        borderRadius: 10,
+        alignItems: 'center',
+      },
  })

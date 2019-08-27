@@ -54,7 +54,7 @@ export default class MyOrderScreen extends Component {
                     <FlatList
                     data={this.state.datasource}
                     renderItem = {({item})=>(
-                        <View style={{color: 'dark grey'}}>
+                        <View >
                         <TouchableOpacity 
                         onPress={()=> this.props.navigation.navigate("OrderDetails", {
                         OrderID: item.id
@@ -73,8 +73,6 @@ export default class MyOrderScreen extends Component {
                         </TouchableOpacity>
                         <View style={{borderWidth:1,width:"100%",borderColor: '#a9a9a9'}}/>
                         </View>
-                        
-                        
                         
                         )}
                         keyExtractor={(item, index) => index.toString()}
@@ -117,7 +115,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
-        
+        marginRight: 20
 
     },
     costText:{

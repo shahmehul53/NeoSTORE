@@ -110,9 +110,12 @@ export default class CustomDrawer extends Component{
                 <Image style={{height: 35,width: 35}} source={item.image}/>
                 <Text style={styles.textData}>{item.title}</Text>
                 {this.displayCount(item.cartCount)}
+                
                 </View>
                 
             </TouchableOpacity>
+            
+            
         }
         keyExtractor={(item, index) => index.toString()}
         />

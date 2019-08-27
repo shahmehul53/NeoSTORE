@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Button, Image, TextInput, Text,ScrollView,TouchableOpacity,FlatList,Dimensions} from 'react-native';
 import R from '../R';
-import {BackgroundCarousel} from "../components/BackgroundCarousel";
+import BackgroundCarousel from "../components/BackgroundCarousel";
 
 
 
