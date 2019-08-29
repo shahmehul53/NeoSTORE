@@ -47,7 +47,7 @@ export default class ProductDetails extends Component{
             alert(responseJson.user_msg),
             //this.setQuantityModalVisible(!this.state.quantityModalVisible);
         setTimeout(function(){
-            navigate("Home");
+            navigate("Home")
         },1000);
     } else if(responseJson.status == 401){
         alert(responseJson.user_msg)
@@ -304,10 +304,10 @@ export default class ProductDetails extends Component{
                         transparent={false}
                         visible={this.state.ratingModalVisible}>
                         
-                            {/* <TouchableOpacity
+                            <TouchableOpacity
                                 style={{flex: 1}}
                                 activeOpacity={1}
-                                onPressOut={() => {this.setRatingModalVisible(false)}}> */}
+                                onPressOut={() => {this.setRatingModalVisible(false)}}>
                                
                             <View style={{flex: 1,backgroundColor: '#a9a9a9'}}>
                                 <View style={modalStyles.modal}>
@@ -324,7 +324,7 @@ export default class ProductDetails extends Component{
                                     </View>
                                     </View>
                                 </View> 
-                                {/* </TouchableOpacity>  */}
+                                </TouchableOpacity> 
                                 
                         </Modal>       
                 </View>

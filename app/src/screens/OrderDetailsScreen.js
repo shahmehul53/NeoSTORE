@@ -58,9 +58,11 @@ export default class OrderDetailsScreen extends Component {
         } else {
             return(
                 <View style={styles.container}>
+                    <View style={{height: "80%"}}>
                     <FlatList
                     data={this.state.datasource}
                     renderItem = {({ item })=>(
+                        <View>
                         <View style={{flexDirection: 'row', margin: 10}}>
                             <View style={{flex: 1}}>
                                 <Image 
@@ -75,11 +77,15 @@ export default class OrderDetailsScreen extends Component {
                             <View style={{flex: 1, paddingTop: 44}}>
                                 <Text style={styles.amtText}>Rs.{item.total}</Text>
                             </View>
+                            
                         </View>
+                        <View style={{borderWidth:1,width:"100%",borderColor: '#a9a9a9'}}/>
+                    </View>
                     )}
                     keyExtractor={(item, index) => index.toString()}
                     />
-                    <View style={{flex: 3, flexDirection: 'row'}}>
+                    </View>
+                    <View style={{height: "20%", flexDirection: 'row'}}>
                         <View style={{flex:4, paddingLeft: 20}}>
                             <Text style={styles.totalText}>TOTAL</Text>
                         </View>

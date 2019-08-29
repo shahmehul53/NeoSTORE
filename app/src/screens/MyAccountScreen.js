@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button,Image,AsyncStorage,KeyboardAvoidingView,ActivityIndicator } from 'react-native';
+import { View,ScrollView, Text, StyleSheet, Button,Image,AsyncStorage,KeyboardAvoidingView,ActivityIndicator } from 'react-native';
 import R from '../R';
 import CustomTextInput from '../components/CustomTextInput'
 import CustomButton from '../components/CustomButton';
@@ -28,18 +28,25 @@ export default class MyAccountScreen extends Component {
         return Api('users/getUserData','GET',null)
         .then((responseJson)=>{
             console.log(responseJson)
-            if(responseJson.status == 200){
+           
                 this.setState(
                     {
                         datasource: responseJson.data.user_data,
                         isLoading: !this.state.isLoading
-                    }
-                )   
-            }
-                  
+                    
+                    }) ;
+                try {
+                    AsyncStorage.setItem("@storage_Key_phoneNo",this.state.datasource.phone_no);
+                    AsyncStorage.setItem("@storage_Key_dob",this.state.datasource.dob);
+                    AsyncStorage.setItem("@storage_Key_fname",this.state.datasource.first_name);
+                    AsyncStorage.setItem("@storage_Key_lname",this.state.datasource.last_name);
+                } catch(error){
+                    console.log(error);
+                }
+            
         }).catch((err)=> {
             console.error(err)
-        })
+        });
     }
         
     render(){
@@ -57,7 +64,7 @@ export default class MyAccountScreen extends Component {
         else{
             return(
                 <View style={style.container}>
-                    <KeyboardAvoidingView  behavior="padding" enabled>
+                    <ScrollView contentContainerStyle={style.container}>
                         <View style={styles.imgView}>
                         <Image style={styles.imgStyle} source={R.images.user_male}/>
                         </View>
@@ -120,7 +127,7 @@ export default class MyAccountScreen extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    </KeyboardAvoidingView>
+                    </ScrollView>
                 </View>
             )
         }

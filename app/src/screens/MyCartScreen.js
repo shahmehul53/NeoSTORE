@@ -7,7 +7,8 @@ import CustomRedButton from '../components/CustomRedButton';
 import Swipeout from 'react-native-swipeout';
 import NumericInput from 'react-native-numeric-input'
 import Api from '../components/Api';
-import MyContext from '../context/MyContext'
+import MyContext from '../context/MyContext';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 width: Dimensions.get('window').width;
 height: Dimensions.get('window').height
@@ -131,33 +132,28 @@ export default class MyCartScreen extends Component {
             if(this.state.cartCount!=null){
                 return(
                     <View style={{flex: 1}}>
-                        <View style={{flex:1,width: '100%'}}>
+                        <View style={{flex:8,height: "80%"}}>
                             <FlatList
-                              data={this.state.datasource}
-                              renderItem={({ item }) => (
-                                <Swipeout right={swipeoutBtns}
-                                onOpen={()=>this.onSwipeOpen(item.product.id)}
-                                onClose={()=>this.onSwipeClose(item.product.id)}
-                                autoClose={true}
-                                backgroundColor="transparent">
-        
-                                <View style={{flexDirection: 'row', margin: 10}}>
+                            data={this.state.datasource}
+                            renderItem={({item})=>(
+                                <View>
+                                <View style={{flexDirection: 'row',marginLeft: 10,width: "100%"}}>
                                     <View style={{flex: 1}}>
-                                        <Image 
-                                        style={{width: 75, height: 75}}
+                                        <Image
+                                        style={{width: wp('20%'),height: hp('12%'),margin: 8}}
                                         source={{uri: item.product.product_images}}
                                         />
                                     </View>
-                                        <View style={{flex: 3}} >
-                                           <Text style={{fontSize: 20, fontWeight: 'bold', color: '#1C1C1C'}}>
-                                            {item.product.name}
-                                           </Text>
-                                           <Text>({item.product.product_category})</Text>
-                                           <View style={{paddingTop: 10, flexDirection: 'row'}}>
-                                           <NumericInput  
+                                    <View style={{flex:3,marginTop: 10}}>
+                                        <View >
+                                            <Text style={{fontSize: hp("2.5%"), fontWeight: 'bold', color: '#1C1C1C'}}>{item.product.name}</Text>
+                                            <Text style={{fontSize: hp('2%')}}>({item.product.product_category})</Text>
+                                        </View>
+                                        <View style={{flex:1,paddingTop: 10, flexDirection: 'row'}}>
+                                        <NumericInput  
                                              onChange={value => this.editCart(value,item.product.id)}
-                                             totalWidth={100} 
-                                             totalHeight={25} 
+                                             totalWidth={hp("10%")} 
+                                             totalHeight={hp("4%")} 
                                              iconSize={25}
                                              minValue={1}
                                              maxValue={8}
@@ -166,62 +162,61 @@ export default class MyCartScreen extends Component {
                                              valueType='integer'
                                              rounded 
                                              textColor='#E91C1A' 
-                                             iconStyle={{ color: 'white' }} 
+                                             iconStyle={{ color: 'black' }} 
                                              borderColor='black'
                                             rightButtonBackgroundColor='#E91C1A' 
                                             leftButtonBackgroundColor='#E91C1A'
-                                            />  
-                                            <Text style={{fontSize: 15,color: '#333333',marginLeft: 30,fontWeight: 'bold'}}>र {item.product.cost}</Text>
-                                            
-                                            {/* <View style={{flex: 1,justifyContent: 'flex-end',flexDirection: 'row',alignItems: 'flex-end',paddingHorizontal: 30}}> */}
+                                            /> 
+                                            <Text style={{fontSize: 15,color: '#333333',paddingLeft: 20,fontWeight: 'bold',paddingTop:8}}>र {item.product.cost}</Text>
                                             <MyContext.Consumer>
                                                 {contextValue=>(
-                                                    <View style={{flex: 1,justifyContent: 'flex-end',flexDirection: 'row',alignItems: 'flex-end'}}>
-                                                        <TouchableOpacity style={{paddingLeft: 40}} onPress={()=>{this.deleteItem(this.state.pid);
+                                                        <TouchableOpacity style={{flex:1,}} onPress={()=>{this.deleteItem(this.state.pid);
                                                         contextValue.minusCount();}}>
-                                                            <Image style={{height: 50, width: 50}} source={R.images.delete}/>
+                                                            
+                                                            <Image style={{paddingLeft: 20,height: 40, width: 40,marginLeft:40,}} source={R.images.delete}/>
+                                                            
                                                          </TouchableOpacity>
-                                                    </View>
+                                
                                                 )}
-                                            {/* <TouchableOpacity style={{paddingLeft: 40,paddingBottom: 50}} onPress={()=>this.deleteItem(this.state.pid)}>
-                                                 <Image style={{height: 50, width: 50}} source={R.images.delete}/>
-                                            </TouchableOpacity> */}
                                             </MyContext.Consumer>
-                                            {/* </View> */}
-                                            </View>
-                                            {/* <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end'}}>
-                                                <Text style={{fontSize: 15,color: '#333333',alignItems: "flex-end",justifyContent: 'flex-end',paddingBottom: 10,fontWeight: 'bold'}}>र {item.product.cost}</Text>
-                                            </View> */}
                                         </View>
+                            
+                                       
+                                    </View>
+                                   
                                 </View>
-                                </Swipeout>
-                                 )}                        
-                                keyExtractor={(item, index) => index.toString()}
+                                <View style={{borderWidth:1,width:"100%",borderColor: '#a9a9a9'}}/>
+                            </View>
+                                
+                                 
+                            )}
+                            keyExtractor={(item, index) => index.toString()}
+                            
                             />
                         </View>
-                        <View style={{flex: 0.5}}>
-                        <View style={{ flexDirection: 'row'}}>
-                            <View style={{flex: 3, paddingLeft: 20}}>
-                                <Text style={{fontSize: 20, fontWeight: 'bold'}}>TOTAL</Text>
+                        <View style={{flex: 2,marginLeft: 20,width: "100%",height: "20%",justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={{ flex: 1,flexDirection: 'row',paddingTop: 10}}>
+                            <View style={{ width:"70%"}}>
+                                <Text style={{fontSize: 20, fontWeight: 'bold'}}>TOTAL:</Text>
                                 
                             </View>
-                            <View style={{flex: 1, paddingLeft: 20}}>
+                            <View style={{paddingRight: 30}}>
                               <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.state.total}</Text>
                             </View> 
                             
                         </View>
-                        <View style={{flex: 1,alignItems: 'center'}}>
+                        <View style={{justifyContent: 'center',alignItems: 'center',marginBottom: 20,marginRight: 30}}>
                                <CustomRedButton 
                                title="ORDER NOW"
                                onPress={()=>this.props.navigation.navigate("AddAddress")}>
                                </CustomRedButton>
                         </View>
                     </View>
+
                     </View>
-                )
-            } else {
+                )} else {
                 return(
-                    <View style={{flex: 1, alignItems: 'center'}}>
+                    <View style={{flex: 1, alignItems: 'center',justifyContent: 'center'}}>
                         {/* <Image  source={R.images.cartEmpty}/> */}
                         <Text style={{fontSize: 25, color: R.color.backgroundColorDefault,fontWeight: 'bold', paddingTop: 20}}>Cart is Empty</Text>
                     </View>

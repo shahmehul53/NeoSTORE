@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import R from './R';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const style=StyleSheet.create({
     container: {
@@ -14,22 +15,23 @@ const style=StyleSheet.create({
     textInputStyle: {
         borderWidth:1.5,
         borderColor:R.color.textInputBorderColor,
-        height:41,
-        width:300,
-        margin: 5,
-        marginLeft: 10,
-        marginRight: 10,
+        width: wp("83%"),
+        height:hp("7"),
+        //margin: 5,
+        marginTop: 10,
+        marginHorizontal: 30,
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'center',
         backgroundColor:R.color.backgroundColorDefault,
-        paddingHorizontal:10
+        paddingHorizontal:10,
+        //paddingVertical: 10
     },
     headerTitleStyle: {
-        fontSize:45,
+        fontSize:60,fontWeight: 'bold',
         color:'#FFFFFF',
         marginBottom: 43,
-        alignItems: 'center',
+        //alignItems: 'center',
         
     },
     
@@ -37,19 +39,27 @@ const style=StyleSheet.create({
         backgroundColor:'white',
         color:'red',
         marginHorizontal:30,
-        marginVertical: 15,
-        width:300,
-        height:51,
+        //marginVertical: 10,
+        marginTop: 20,
+        marginBottom: 10,
+        paddingHorizontal:10,
+        //marginRight:30,
+        //marginLeft: 30, 
+        width: wp("83%"),
+        height:hp("7.8%"),
         alignItems:'center',
         justifyContent:'center',
         //textAlign:'center',
-        borderRadius:5,
+        borderRadius:8,
+        padding: 15
         //fontSize:20
     },
     forgotBtn: {
         marginTop: 10,
         color: R.color.textInputBorderColor,
-        fontSize: 20
+        fontSize: 20,
+        fontWeight: 'bold',
+        fontStyle: 'normal'
     },
     regAccount:{
         flex: 1,

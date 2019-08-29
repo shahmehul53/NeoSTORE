@@ -177,7 +177,6 @@ export default class RegisterScreen extends Component {
                 </View>
                 
                 <CustomButton title='REGISTER' onPress={()=> 
-                    // this.registeredUSer("abc","def","abc@gmail.com","abc123","abc123","M",9874563210)}/>
                  this.registerUser(this.state.first_name,this.state.last_name,this.state.email,this.state.password,this.state.confirm_password,this.state.gender,this.state.phone_no)} ></CustomButton> 
                  {this.loadingView()}
                 </View>

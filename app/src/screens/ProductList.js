@@ -80,7 +80,7 @@ export default class ProductList extends Component {
                                         
                                         <View style={{flexDirection: 'row'}}>
                                             <View style={{flex: 3}}>
-                                               <Text style={{color:"#FE4040",fontSize: 20, fontWeight: 'bold'}}>Rs.{item.cost}</Text>
+                                               <Text style={{color:"#E91C1A",fontSize: 20, fontWeight: 'bold'}}>Rs.{item.cost}</Text>
                                                </View>
                                                
                                                

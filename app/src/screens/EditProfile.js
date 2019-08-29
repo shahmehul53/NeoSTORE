@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button,Image,AsyncStorage,KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, Button,Image,AsyncStorage,KeyboardAvoidingView,ActivityIndicator,ScrollView } from 'react-native';
 import R from '../R';
 import CustomTextInput from '../components/CustomTextInput'
 import CustomButton from '../components/CustomButton';
@@ -21,15 +21,34 @@ export default class EditProfleScreen extends Component {
             email: "",
             phone_no: "",
             dob: "",
-            isLoading: true
+            isLoading: false,
+            
         }
+        this.getUserData();
     } 
+
+    async getUserData(){
+        try{
+            this.setState({
+                access_token: await AsyncStorage.getItem("@storage_Key_token"),
+                first_name: await AsyncStorage.getItem("@storage_Key_fname"),
+                last_name: await AsyncStorage.getItem("@storage_Key_lname"),
+                email: await AsyncStorage.getItem("@storage_Key_email"),
+                phone_no: await AsyncStorage.getItem("@storage_Key_phoneNo"),
+                dob: await AsyncStorage.getItem("@storage_Key_dob")
+            })
+        }catch(error){
+            console.log(error)
+        }
+    }
     
     updateProfile(first_Name,last_Name,email,phone_no,dob,contextValue){
         return Api('users/update','POST',`first_name=${first_Name}&last_name=${last_Name}&email=${email}&profile_pic=${"abc.jpg"}&phone_no=${phone_no}&dob=${dob}`)
         .then((responseJson)=>{
-        console.log(responseJson.status)
+        console.log("edit profile status"+responseJson.status)
+        console.log("response"+responseJson)
         this.setState({datasource: responseJson}, function(){});
+        
         contextValue.updateData()
         this.profileEditedSuccessfully()
         }).catch((err)=> {
@@ -60,22 +79,21 @@ export default class EditProfleScreen extends Component {
             return <CustomActivityIndicator />;
         }
     }
-
     render(){
+
         return(
         <View style={style.container}>
-            <KeyboardAvoidingView  behavior="padding" enabled>
-            {/* <View style={{flex: 9, paddingBottom: 20}}> */}
+            <ScrollView contentContainerStyle={style.container}>
                 <View style={styles.imgView}>
                 <Image style={styles.imgStyle} source={R.images.profile}/>
                 </View>
                 
                 <View style={{flex: 5, alignItems: 'center'}}>
-                <CustomTextInput sourceImage={R.images.username_icon} autoCapitalize="none" onChangeText={(first_name)=>this.setState({first_name})} placeholderValue='First Name'/>
-                <CustomTextInput sourceImage={R.images.username_icon} autoCapitalize="none" onChangeText={(last_name)=>this.setState({last_name})} placeholderValue='Last Name'/>
-                <CustomTextInput sourceImage={R.images.email_icon} autoCapitalize="none" keyboardType="email-address" onChangeText={(email)=>this.setState({email})} placeholderValue='Email'/>
-                <CustomTextInput sourceImage={R.images.cellphone} autoCapitalize="none" onChangeText={phone_no=>this.setState({phone_no})} placeholderValue='Mobile No.'/>
-                <CustomTextInput sourceImage={R.images.dob_icon} autoCapitalize="none" onChangeText={dob=>this.setState({dob})} placeholderValue='DOB'/>
+                <CustomTextInput sourceImage={R.images.username_icon} autoCapitalize="none" defaultValue={this.state.first_name} onChangeText={(first_name)=>this.setState({first_name})} placeholderValue='First Name'/>
+                <CustomTextInput sourceImage={R.images.username_icon} autoCapitalize="none" defaultValue={this.state.last_name} onChangeText={(last_name)=>this.setState({last_name})} placeholderValue='Last Name'/>
+                <CustomTextInput sourceImage={R.images.email_icon} autoCapitalize="none" keyboardType="email-address" defaultValue={this.state.email} onChangeText={(email)=>this.setState({email})} placeholderValue='Email'/>
+                <CustomTextInput sourceImage={R.images.cellphone} autoCapitalize="none" defaultValue={this.state.phone_no} onChangeText={phone_no=>this.setState({phone_no})} placeholderValue='Mobile No.'/>
+                <CustomTextInput sourceImage={R.images.dob_icon} autoCapitalize="none" defaultValue={this.state.dob} onChangeText={dob=>this.setState({dob})} placeholderValue='DOB'/>
 
                 {/* <View style={{ justifyContent: 'center', alignItems: 'center'}}> */}
                 <MyContext.Consumer>
@@ -87,11 +105,12 @@ export default class EditProfleScreen extends Component {
                 />}
                 
                 </MyContext.Consumer>
-                {/* {this.loadingView()} */}
+                {this.loadingView()}
                 </View>
-                </KeyboardAvoidingView>
+                </ScrollView>
          </View>
         )
+                
     }
 }
 

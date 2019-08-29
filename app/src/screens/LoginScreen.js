@@ -8,6 +8,7 @@ import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import CustomActivityIndicator from '../components/CustomActivityIndicator';
 import Api from '../components/Api';
 import MyContext from '../context/MyContext';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 let winSize = Dimensions.get('window');
 console.log(winSize);
@@ -52,7 +53,8 @@ export default class LoginScreen extends Component {
                 "" + this.state.datasource.data.first_name,
                 "" + this.state.datasource.data.last_name,
                 "" + this.state.datasource.data.email,
-                "" + this.state.datasource.data.access_token
+                "" + this.state.datasource.data.access_token,
+                "" + this.state.datasource.data.phone_no
             ),
             setTimeout(function(){
                 navigate("Home");
@@ -66,15 +68,14 @@ export default class LoginScreen extends Component {
         }
     }
 
-    async saveData(val1,val2,val3,val4,userName){
+    async saveData(val1,val2,val3,val4,val5){
         const fname = ["@storage_Key_fname", val1];
         const lname = ["@storage_Key_lname", val2];
         const email = ["@storage_Key_email", val3];
-        //let userName = fname + lname
-        //const name = ["@storage_Key_uname",userName]
         const access_token = ["@storage_Key_token",val4];
+        const phoneNo = ["@storage_Key_phoneNo",val5]
         try{
-            await AsyncStorage.multiSet([fname,lname,email,access_token])
+            await AsyncStorage.multiSet([fname,lname,email,access_token,phoneNo])
         } catch(e){
             console.log("Failed to retrieve data"+error)
         }
@@ -91,8 +92,11 @@ export default class LoginScreen extends Component {
         return(
             <View style={style.container}>
                 <ScrollView contentContainerStyle={style.container}>
-                <View style={{flex: 8, justifyContent: 'center',alignItems: 'center'}}>
-                  <Text style={style.headerTitleStyle}>{R.strings.AppName}</Text> 
+                <View style={{flex: 8, justifyContent: 'center',alignItems: 'center',width: '100%'}}>
+                    <View style={{width: '100%',paddingHorizontal: 20,alignItems: 'center',justifyContent: 'center'}}>
+                    <Text style={style.headerTitleStyle}>{R.strings.AppName}</Text>
+                    </View>
+                   
                   <CustomTextInput sourceImage={R.images.username_icon}  placeholderValue='Username' keyboardType="email-address" autoCapitalize="none" onChangeText={(username)=>this.setState({username})}></CustomTextInput>
                   <CustomTextInput sourceImage={R.images.password_icon}  placeholderValue='Password' secureTextEntry = {true} autoCapitalize="none" onChangeText={(password)=>this.setState({password})}></CustomTextInput>
                   <MyContext.Consumer>
@@ -102,22 +106,22 @@ export default class LoginScreen extends Component {
                    ></CustomButton>}
                   </MyContext.Consumer>
                   
-                  <TouchableOpacity onPress={()=>{this.props.navigation.navigate('ForgotPassword')}}>
+                  <TouchableOpacity style={{}}onPress={()=>{this.props.navigation.navigate('ForgotPassword')}}>
                       <Text style={style.forgotBtn}>Forgot Password?</Text>
                   </TouchableOpacity>
                   {this.loadingView()}
                 </View>
-                <View style={{flex: 1}}>
+                <View style={{flex: 1,alignItems: 'center', justifyContent: 'center',}}>
                     <TouchableHighlight 
                     disabled={this.state.isLoading}
                     underlayColor="transparent"
                     onPress={()=>{this.props.navigation.navigate('Register')}}>
                         
-                        <View style={{flexDirection: 'row',justifyContent: 'flex-start',alignItems: 'flex-start',marginRight: 30}}>
-                            <View style={{alignItems: 'flex-start',justifyContent: 'center'}} >
+                        <View style={{flexDirection: 'row'}}>
+                            <View style={{paddingLeft: 10}} >
                                <Text style={styles.regAccountText}>DONT HAVE AN ACCOUNT?</Text> 
                             </View>
-                            <View style={{ justifyContent: 'flex-end',alignItems: 'flex-start'}}>
+                            <View style={{ }}>
                                <Image source={R.images.Plus} style={{height: 20, width: 20}} ></Image>
                              </View>
                         </View>    
@@ -134,9 +138,12 @@ export default class LoginScreen extends Component {
 const styles=StyleSheet.create({
     regAccountText: {
         color: R.color.textInputBorderColor,
-        fontSize: 14,
-        marginLeft: 30,
+        fontSize: 16,
+        //marginLeft: 30,
+        paddingRight: 80,
+        paddingLeft: 10, 
         fontWeight: 'bold',
-        paddingRight: 80,   
+        fontStyle: 'normal',
+         
     },
 })

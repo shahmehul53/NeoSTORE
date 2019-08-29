@@ -99,10 +99,12 @@ export default class CustomDrawer extends Component{
                           <Text style={{fontSize: 15, paddingBottom: 5, color: 'white'}}>{contextValue.state.userEmail}</Text>
                           </View>}
                       </MyContext.Consumer>
+                      <View style={{borderWidth:1,width:"100%",borderColor: 'white'}}/>
                     </View>
                <FlatList
                data={this.state.drawerData}
                renderItem={({item})=>
+               <View>
                <TouchableOpacity style={styles.drawerView} key={item.image}
                 onPress={()=>this.props.navigation.navigate(item.screen,{id: item.id, productCategory: item.productType})}>
                 
@@ -111,9 +113,12 @@ export default class CustomDrawer extends Component{
                 <Text style={styles.textData}>{item.title}</Text>
                 {this.displayCount(item.cartCount)}
                 
+                  
                 </View>
                 
             </TouchableOpacity>
+            {/* <View style={{borderWidth:1,width:"100%",borderColor: 'white'}}/> */}
+            </View>
             
             
         }
