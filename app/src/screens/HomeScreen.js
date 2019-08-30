@@ -4,7 +4,7 @@ import R from '../R';
 import BackgroundCarousel from "../components/BackgroundCarousel";
 import {scale,verticalScale,moderateScale} from 'react-native-size-matters'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
+import {Ionicons} from '@expo/vector-icons';
 
 const { width,height} = Dimensions.get("window");
 
@@ -39,8 +39,9 @@ export default class HomeScreen extends Component {
                 </TouchableOpacity>
             ),
             headerRight:(
-                <TouchableOpacity style={{paddingRight: scale(10)}}>
-                    <Image source={R.images.search_icon} />
+                <TouchableOpacity style={{paddingRight: scale(10)}} onPress={()=>navigation.navigate("MyCart")}>
+                    {/* <Image source={R.images.search_icon} /> */}
+                    <Ionicons name="md-cart" color="white" size={30}/>
                 </TouchableOpacity>
             ),
             headerTintColor: R.color.textInputBorderColor,

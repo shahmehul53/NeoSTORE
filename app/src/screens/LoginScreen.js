@@ -101,8 +101,8 @@ export default class LoginScreen extends Component {
                   <CustomTextInput sourceImage={R.images.password_icon}  placeholderValue='Password' secureTextEntry = {true} autoCapitalize="none" onChangeText={(password)=>this.setState({password})}></CustomTextInput>
                   <MyContext.Consumer>
                     {contextValue=><CustomButton title='LOGIN' 
-                     onPress={()=> this.props.navigation.navigate('Home')}
-                    //onPress={()=> this.loginUser(contextValue)}
+                    // onPress={()=> this.props.navigation.navigate('Home')}
+                    onPress={()=> this.loginUser(contextValue)}
                    ></CustomButton>}
                   </MyContext.Consumer>
                   
